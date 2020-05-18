@@ -571,7 +571,6 @@ class Cards(commands.Cog):
             return
         return recc
 
-
     @commands.command()
     async def recommend(self, ctx, *args):
         '''Recommend a fic to everyone, inserts the recommendation in the Recs sheet of the patreon recommendations.
@@ -593,4 +592,3 @@ class Cards(commands.Cog):
         await sheets.mywork(str(ctx.author.name), recc)
         await self.grant(str(ctx.author.id), 3)
         await ctx.send("Thanks for writing a fic, you have been granted bonus cards you can `%tc claim`!")
-
