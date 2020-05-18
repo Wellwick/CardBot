@@ -409,12 +409,12 @@ class Cards(commands.Cog):
             for i in self.cardlist:
                 if s.lower() in i.house.lower():
                     relevant += [i]
-            messages = (await self.messagify_ownership(user, relevant, "{} Cards".format(s)))
+            messages = (await self.messagify_ownership(user, relevant, "{} Member".format(s)))
         elif s.lower() in ["character", "trope", "item"]:
             for i in self.cardlist:
                 if i.type.lower() == s.lower():
                     relevant += [i]
-            messages = (await self.messagify_ownership(user, relevant, "{} Cards".format(s)))
+            messages = (await self.messagify_ownership(user, relevant, "{}".format(s)))
         elif s.lower() in eras:
             for i in self.cardlist:
                 if i.era.lower() == s.lower():
@@ -425,19 +425,19 @@ class Cards(commands.Cog):
                 if s.lower() in i.role.lower():
                     relevant += [i]
             if len(relevant) > 0:
-                messages = (await self.messagify_ownership(user, relevant, "{} Cards".format(s)))
+                messages = (await self.messagify_ownership(user, relevant, "{} Role".format(s)))
             else:
                 for i in self.cardlist:
                     if s.lower() in i.name.lower():
                         relevant += [i]
                 if len(relevant) > 0:
-                    messages = (await self.messagify_ownership(user, relevant, "{} Cards".format(s)))
+                    messages = (await self.messagify_ownership(user, relevant, "{}".format(s)))
                 else:
                     for i in self.cardlist:
                         if s.lower() in i.house.lower() or s.lower() in i.type.lower() or s.lower() in i.era.lower():
                             relevant += [i]
                     if len(relevant) > 0:
-                        messages = (await self.messagify_ownership(user, relevant, "{} Cards".format(s)))
+                        messages = (await self.messagify_ownership(user, relevant, "{}".format(s)))
                     else:
                         messages = ["Could not find any cards that matched the **{}** filter".format(s)]
         for i in messages:
