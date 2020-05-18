@@ -512,6 +512,8 @@ class Cards(commands.Cog):
             %tc trade [offer/view/accept/reject/cancel/help] @username - Make a trade
             %tc craft [Card 1, Card 2, Card 3] - Craft three cards together into a new one
         '''
+        # Wellwick, Kim, sequoia
+        granters = ["227834498019098624","347524359830634496","472241913467240449"]
         if action == "unpause" and str(ctx.author.id) == "227834498019098624":
             self.pause = False
             return
@@ -524,7 +526,7 @@ class Cards(commands.Cog):
         if action == "claim":
             #await ctx.send("Claiming paused while Wellwick fixes things")
             await self.random_claim(ctx, str(ctx.author.id))
-        elif action == "recache" and str(ctx.author.id) == "227834498019098624":
+        elif action == "recache" and str(ctx.author.id) in granters:
             self.cardlist = []
             self.trading = {}
             await self.set_local_cache()
@@ -545,9 +547,50 @@ class Cards(commands.Cog):
             await self.filter(ctx, str(ctx.author.id), *args)
         elif action == "pause" and str(ctx.author.id) == "227834498019098624":
             self.pause = True
-        elif action == "grant" and str(ctx.author.id) == "227834498019098624":
+        elif action == "grant" and str(ctx.author.id) in granters:
             who = await self.at_to_id(args[0])
             amount = int(args[1])
             await self.grant(who, amount)
         elif action == "craft":
             await self.craft(ctx, str(ctx.author.id), *args)
+
+    async def recc(self, ctx, command, *args):
+        '''recommend and mywork have the same format, so this shares the code
+        '''
+        s = ""
+        for i in args:
+            s += i + " "
+        recc = s.split("|")
+        for i in range(0,len(recc)):
+            recc[i] = recc[i].strip()
+        if len(recc) > 6:
+            await ctx.send("Too many parts to your {}, look at `%help {}`".format(command, command))
+            return
+        if recc[0] == "":
+            await ctx.send("Couldn't see a link! Look at `%help {}`".format(command))
+            return
+        return recc
+
+
+    @commands.command()
+    async def recommend(self, ctx, *args):
+        '''Recommend a fic to everyone, inserts the recommendation in the Recs sheet of the patreon recommendations.
+        Format of recommend is %recommend link | title | tags | characters/pairings | length | additional notes
+        All but link are optional, but encouraged!
+        '''
+        recc = await self.recc(ctx, "recommend", *args)
+        await sheets.recommend(str(ctx.author.name), recc)
+        await self.grant(str(ctx.author.id), 1)
+        await ctx.send("Thanks for recommending a fic, you have been granted a bonus card you can `%tc claim`!")
+
+    @commands.command()
+    async def mywork(self, ctx, *args):
+        '''Submit one of your fics, inserts the link in the Works sheet of the patreon recommendations.
+        Format of mywork is %mywork link | title | tags | characters/pairings | length | additional notes
+        All but link are optional, but encouraged!
+        '''
+        recc = await self.recc(ctx, "mywork", *args)
+        await sheets.mywork(str(ctx.author.name), recc)
+        await self.grant(str(ctx.author.id), 3)
+        await ctx.send("Thanks for writing a fic, you have been granted bonus cards you can `%tc claim`!")
+

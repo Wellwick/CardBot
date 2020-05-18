@@ -13,6 +13,7 @@ drive_service = build('drive', 'v3', credentials=c)
 # - - - - More weird channel stuff below. Should hopefully still work when copy-pasted
 
 TradingDatabaseID = '1MWxevabC-7OiQuEd8vT6HWsLGxhqTHxkhKOLzLP7Qmk'
+ReccID = '1MYxwMMXpNfx22gsbPmKLlkPh30NZNXeKSMBo96s7knc'
 
 async def trading_cards():
     sheet = service.spreadsheets()
@@ -151,3 +152,49 @@ async def remove_cards(owner, cards):
             }
         }
         batch_res = sheet.batchUpdate(spreadsheetId=TradingDatabaseID, body={"requests": [del_req]}).execute()
+
+async def recc_sheet_write(sheet_id, sheet_name, who, recc):
+    sheet = service.spreadsheets()
+    result = sheet.values().get(spreadsheetId=ReccID,
+                                range='{}!A3:G1000'.format(sheet_name)).execute()
+    values = result.get('values', [])
+    used_rows = 2
+    for row in values:
+        try:
+            if not str(row[0]) == "":
+                used_rows += 1
+            else:
+                break
+        except:
+            break
+
+    data_to_paste = '<table><tr><td>' + str(recc[0]) + '</td>'
+    if len(recc) > 1:
+        data_to_paste += '<td>{}</td>'.format(recc[1])
+    else:
+        data_to_paste += '<td></td>'
+    data_to_paste += '<td>{}</td>'.format(who)
+    for i in recc[2:]:
+        data_to_paste += '<td>{}</td>'.format(i)
+    data_to_paste += '</tr></table>'
+
+    paste_req = {
+        "pasteData": {
+            "coordinate": {
+                "sheetId": sheet_id,
+                "rowIndex": used_rows,
+                "columnIndex": 0
+            },
+            "data": data_to_paste,
+            "type": "PASTE_VALUES",
+            "html": True
+        }
+    }
+    reqs = [paste_req]
+    batch_res = sheet.batchUpdate(spreadsheetId=ReccID, body={"requests": reqs}).execute()
+
+async def recommend(who, recc):
+    await recc_sheet_write(0, "Recs", who, recc)
+
+async def mywork(who, recc):
+    await recc_sheet_write(1683188476, "Works", who, recc)
