@@ -589,6 +589,11 @@ class Cards(commands.Cog):
             await self.set_local_cache()
         recc = await self.recc(ctx, "recommend", *args)
         await sheets.recommend(str(ctx.author.name), recc)
+        if len(recc) == 1:
+            recc += ["", ctx.author.name]
+        else:
+            recc.insert(2, ctx.author.name)
+        self.fics += [recc]
         await self.grant(str(ctx.author.id), 1)
         await ctx.send("Thanks for recommending a fic, you have been granted a bonus card you can `%tc claim`!")
 
@@ -603,6 +608,11 @@ class Cards(commands.Cog):
             await self.set_local_cache()
         recc = await self.recc(ctx, "mywork", *args)
         await sheets.mywork(str(ctx.author.name), recc)
+        if len(recc) == 1:
+            recc += ["", ctx.author.name]
+        else:
+            recc.insert(2, ctx.author.name)
+        self.works += [recc]
         await self.grant(str(ctx.author.id), 3)
         await ctx.send("Thanks for writing a fic, you have been granted bonus cards you can `%tc claim`!")
 
