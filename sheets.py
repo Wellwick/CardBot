@@ -17,7 +17,7 @@ TradingDatabaseID = '1MWxevabC-7OiQuEd8vT6HWsLGxhqTHxkhKOLzLP7Qmk'
 async def trading_cards():
     sheet = service.spreadsheets()
     result = sheet.values().get(spreadsheetId=TradingDatabaseID,
-                                range='Cards!A2:H1000').execute()
+                                range='Cards!A2:I1000').execute()
     values = result.get('values', [])
     allinfo = []
     for row in values:

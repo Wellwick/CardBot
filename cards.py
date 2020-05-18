@@ -12,8 +12,8 @@ class Card:
         ctype,
         era,
         tagline,
-        submitter,
-        relevant = ""
+        relevant,
+        submitter
     ):
         self.name = name.strip()
         self.role = role.strip()
@@ -23,7 +23,10 @@ class Card:
         self.era = era.strip()
         self.tagline = tagline.strip()
         self.submitter = submitter.strip()
-        self.relevant = relevant.strip()
+        if relevant == "None":
+            self.relevant = ""
+        else:
+            self.relevant = relevant.strip()
 
 class Cards(commands.Cog):
 
@@ -121,15 +124,17 @@ class Cards(commands.Cog):
             del self.bonus_claim[claimer_id]
 
     async def view_card(self, ctx, card):
-        message =   "**{}** ({})\n".format(card.name, card.role)
-        message += "> ***{}***\n".format(card.tagline)
+        message =   "**{}**\n".format(card.name)
+        message +=  "> ***{}***\n".format(card.tagline)
         message +=  "> Rarity: **{}**\n".format(card.rarity)
+        if card.role != "None":
+            message += "> Role: {}\n".format(card.role)
         if card.house != "None":
-            message +=  "> House: {}\n".format(card.house)
+            message += "> House: {}\n".format(card.house)
         message +=  "> Type: {}\n".format(card.type)
-        message +=  "> Era: **{}**, {}\n".format(card.era)
+        message +=  "> Era: **{}**\n".format(card.era)
         if card.relevant != "":
-            message +=  "> Relevant Fic: {}".format(card.relevant)
+            message += "> Relevant Fic: {}".format(card.relevant)
         await ctx.send(message)
 
     async def messagify_ownership(self, user, c_list, c_filter = ""):
@@ -398,7 +403,7 @@ class Cards(commands.Cog):
             for i in self.cardlist:
                 if i.rarity.lower() == s.lower():
                     relevant += [i]
-            messages = (await self.messagify_ownership(user, relevant, "{} Rarity".format(s.upper())))
+            messages = (await self.messagify_ownership(user, relevant, "{} Rarity".format(s.capitalize())))
             
         elif s.lower() in houses:
             for i in self.cardlist:
