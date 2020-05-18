@@ -153,6 +153,38 @@ async def remove_cards(owner, cards):
         }
         batch_res = sheet.batchUpdate(spreadsheetId=TradingDatabaseID, body={"requests": [del_req]}).execute()
 
+async def get_fics():
+    sheet = service.spreadsheets()
+    recs_result = sheet.values().get(spreadsheetId=ReccID,
+                                range='Recs!A3:G1000').execute()
+    recs = recs_result.get('values', [])
+    fics = []
+    for row in recs:
+        try:
+            if str(row[0]) != "":
+                fics += [row]
+            else:
+                break
+        except:
+            continue
+    return fics
+
+async def get_works():
+    sheet = service.spreadsheets()
+    works_result = sheet.values().get(spreadsheetId=ReccID,
+                                range='Works!A3:G1000').execute()
+    works = works_result.get('values', [])
+    fics = []
+    for row in works:
+        try:
+            if str(row[0]) != "":
+                fics += [row]
+            else:
+                break
+        except:
+            continue
+    return fics
+
 async def recc_sheet_write(sheet_id, sheet_name, who, recc):
     sheet = service.spreadsheets()
     result = sheet.values().get(spreadsheetId=ReccID,

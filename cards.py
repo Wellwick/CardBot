@@ -36,12 +36,15 @@ class Cards(commands.Cog):
         self.claims = {}
         self.bonus_claim = {}
         self.trades = {}
+        self.fics = []
+        self.works = []
         self.cached = False
         self.pause = False
 
     async def set_local_cache(self):
         await self.load_cards()
         await self.load_owners()
+        await self.load_fics()
         self.cached = True
 
     async def load_cards(self):
@@ -56,6 +59,10 @@ class Cards(commands.Cog):
             if not card[0] in self.trading:
                 self.trading[card[0]] = []
             self.trading[card[0]] += [self.cardlist[int(card[1])]]
+
+    async def load_fics(self):
+        self.fics = await sheets.get_fics()
+        self.works = await sheets.get_works()
 
     async def random_claim(self, ctx, claimer_id):
         # Check if this person has already claimed today
@@ -577,6 +584,9 @@ class Cards(commands.Cog):
         Format of recommend is %recommend link | title | tags | characters/pairings | length | additional notes
         All but link are optional, but encouraged!
         '''
+        if not self.cached:
+            await ctx.send("Caching things on first run")
+            await self.set_local_cache()
         recc = await self.recc(ctx, "recommend", *args)
         await sheets.recommend(str(ctx.author.name), recc)
         await self.grant(str(ctx.author.id), 1)
@@ -588,7 +598,82 @@ class Cards(commands.Cog):
         Format of mywork is %mywork link | title | tags | characters/pairings | length | additional notes
         All but link are optional, but encouraged!
         '''
+        if not self.cached:
+            await ctx.send("Caching things on first run")
+            await self.set_local_cache()
         recc = await self.recc(ctx, "mywork", *args)
         await sheets.mywork(str(ctx.author.name), recc)
         await self.grant(str(ctx.author.id), 3)
         await ctx.send("Thanks for writing a fic, you have been granted bonus cards you can `%tc claim`!")
+
+    async def print_fic(self, ctx, fic, author):
+        link = fic[0]
+        name = ""
+        sub_auth = ""
+        tags = ""
+        chars = ""
+        length = ""
+        notes = ""
+        try:    name = fic[1] + " - "
+        except: pass
+        try:    sub_auth = fic[2]
+        except: pass
+        try:    tags = fic[3]
+        except: pass
+        try:    chars = fic[4]
+        except: pass
+        try:    length = fic[5]
+        except: pass
+        try:    notes = fic[6]
+        except: pass
+        message = "**{}**<{}>\n".format(name,link)
+        if tags != "":
+            message += "> Tags: {}\n".format(tags)
+        if chars != "":
+            message += "> Characters/Pairings: {}\n".format(chars)
+        if length != "":
+            message += "> Length: {}\n".format(length)
+        if sub_auth != "":
+            if author:
+                message += "> Author: {}\n".format(sub_auth)
+            else:
+                message += "> Submitter: {}\n".format(sub_auth)
+        if notes != "":
+            message += "> Additional Notes: {}".format(notes)
+        await ctx.send(message)
+
+    @commands.command()
+    async def recme(self, ctx, *args):
+        '''Provide a random recommendation from the spreadsheet, or get one by name.
+        '''
+        if not self.cached:
+            await ctx.send("Caching things on first run")
+            await self.set_local_cache()
+        if len(args) > 0:
+            s = ""
+            for i in args:
+                s += i + " "
+            s = s[:-1]
+            for i in self.fics:
+                try:
+                    if i[1].lower() == s.lower():
+                        await self.print_fic(ctx, i, False)
+                        return
+                except:
+                    continue
+            for i in self.works:
+                try:
+                    if i[1].lower() == s.lower():
+                        await self.print_fic(ctx, i, True)
+                        return
+                except:
+                    continue
+            await ctx.send("Couldn't find the fic **{}**".format(s))
+        else:
+            fic_range = len(self.fics) + len(self.works)
+            index = random.randrange(0,fic_range)
+            if index < len(self.fics):
+                await self.print_fic(ctx, self.fics[index], False)
+            else:
+                index = index - len(self.fics)
+                await self.print_fic(ctx, self.works[index], True)
