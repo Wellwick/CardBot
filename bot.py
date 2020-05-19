@@ -8,7 +8,7 @@ import discord, git
 from discord.ext import commands
 import asyncio, sys
 import sheets
-import cards
+import cards, ficwriter
 
 '''My (CardBot's) Main Script
 I'm friendly, and I have commands to support playing PD and WD!
@@ -22,7 +22,9 @@ async def hi(ctx, *args):
     '''
     await ctx.send('Hi, <@' + str(ctx.author.id) + '>!')
 
-b.add_cog(cards.Cards())
+c = cards.Cards()
+b.add_cog(c)
+b.add_cog(ficwriter.FicWriter(c))
 
 with open('secret') as s:
     token = s.read()[:-1]

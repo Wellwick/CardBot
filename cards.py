@@ -41,6 +41,11 @@ class Cards(commands.Cog):
         self.cached = False
         self.pause = False
 
+    async def check_cache(self, ctx):
+        if not self.cached:
+            await ctx.send("Caching things on first run")
+            await self.set_local_cache()
+
     async def set_local_cache(self):
         await self.load_cards()
         await self.load_owners()
@@ -527,9 +532,7 @@ class Cards(commands.Cog):
         if self.pause:
             # For when developing on a secondary bot
             return
-        if not self.cached:
-            await ctx.send("Caching things on first run")
-            await self.set_local_cache()
+        await self.check_cache(ctx)
         if action == "claim":
             #await ctx.send("Claiming paused while Wellwick fixes things")
             await self.random_claim(ctx, str(ctx.author.id))
@@ -584,9 +587,7 @@ class Cards(commands.Cog):
         Format of recommend is %recommend link | title | tags | characters/pairings | length | additional notes
         All but link are optional, but encouraged!
         '''
-        if not self.cached:
-            await ctx.send("Caching things on first run")
-            await self.set_local_cache()
+        await self.check_cache(ctx)
         recc = await self.recc(ctx, "recommend", *args)
         await sheets.recommend(str(ctx.author.name), recc)
         if len(recc) == 1:
@@ -603,9 +604,7 @@ class Cards(commands.Cog):
         Format of mywork is %mywork link | title | tags | characters/pairings | length | additional notes
         All but link are optional, but encouraged!
         '''
-        if not self.cached:
-            await ctx.send("Caching things on first run")
-            await self.set_local_cache()
+        await self.check_cache(ctx)
         recc = await self.recc(ctx, "mywork", *args)
         await sheets.mywork(str(ctx.author.name), recc)
         if len(recc) == 1:
@@ -656,9 +655,7 @@ class Cards(commands.Cog):
     async def recme(self, ctx, *args):
         '''Provide a random recommendation from the spreadsheet, or get one by name.
         '''
-        if not self.cached:
-            await ctx.send("Caching things on first run")
-            await self.set_local_cache()
+        await self.check_cache(ctx)
         if len(args) > 0:
             s = ""
             for i in args:
