@@ -83,7 +83,7 @@ class Cards(commands.Cog):
             await ctx.send("Claiming {} bonus cards".format(self.bonus_claim[claimer_id]))
             amount += self.bonus_claim[claimer_id]
         if not claimer_id in self.claims[day]:
-            amount += 1
+            amount += 5
 
         total = 0
         for i in self.cardlist:
@@ -463,7 +463,7 @@ class Cards(commands.Cog):
         if s == "help":
             message = "Pass in three cards you own to craft one of a higher rarity. "
             message += "Mixing card raritys spreads your probability of getting an upgraded rarity "
-            message += "(ie [Rarity A, Rarity A, Rarity C] = 66% chance of Rarity S, 33% chance of Rarity B).\n"
+            message += "(ie [Rarity Rare, Rarity Rare, Rarity Common] = 66% chance of Rarity Legendary, 33% chance of Rarity Uncommon).\n"
             message += "`%tc craft [Card 1, Card 2, Card 3]`"
             await ctx.send(message)
             return
@@ -511,7 +511,7 @@ class Cards(commands.Cog):
 
     @commands.command()
     async def tc(self, ctx, action, *args):
-        '''Do things for the Parahumans server trading card game.
+        '''Do things for the Fanatical Fics server trading card game.
             %tc claim - Claim your daily free card
             %tc view [Card] - View all the cards you own
             %tc submit - Get the link to submit new cards for review
@@ -594,8 +594,8 @@ class Cards(commands.Cog):
         else:
             recc.insert(2, ctx.author.name)
         self.fics += [recc]
-        await self.grant(str(ctx.author.id), 1)
-        await ctx.send("Thanks for recommending a fic, you have been granted a bonus card you can `%tc claim`!")
+        await self.grant(str(ctx.author.id), 2)
+        await ctx.send("Thanks for recommending a fic, you have been granted bonus cards you can `%tc claim`!")
 
     @commands.command()
     async def mywork(self, ctx, *args):
@@ -613,7 +613,7 @@ class Cards(commands.Cog):
         else:
             recc.insert(2, ctx.author.name)
         self.works += [recc]
-        await self.grant(str(ctx.author.id), 3)
+        await self.grant(str(ctx.author.id), 5)
         await ctx.send("Thanks for writing a fic, you have been granted bonus cards you can `%tc claim`!")
 
     async def print_fic(self, ctx, fic, author):
