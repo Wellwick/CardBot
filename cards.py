@@ -229,12 +229,12 @@ class Cards(commands.Cog):
             return False
         card_dict = {}
         for i in self.trading[user]:
-            if not i.name in card_dict:
-                card_dict[i.name] = 0
-            card_dict[i.name] += 1
+            if not i.name.lower() in card_dict:
+                card_dict[i.name.lower()] = 0
+            card_dict[i.name.lower()] += 1
         for i in cards:
-            if i in card_dict and card_dict[i] > 0:
-                card_dict[i] -= 1
+            if i.lower() in card_dict and card_dict[i.lower()] > 0:
+                card_dict[i.lower()] -= 1
             else:
                 return False
 

@@ -185,6 +185,22 @@ async def get_works():
             continue
     return fics
 
+async def get_bunnies():
+    sheet = service.spreadsheets()
+    works_result = sheet.values().get(spreadsheetId=ReccID,
+                                range='Plot Bunnies!A2:A1000').execute()
+    works = works_result.get('values', [])
+    bunnies = []
+    for row in works:
+        try:
+            if str(row[0]) != "":
+                bunnies += [str(row[0])]
+            else:
+                break
+        except:
+            continue
+    return bunnies
+
 async def recc_sheet_write(sheet_id, sheet_name, who, recc):
     sheet = service.spreadsheets()
     result = sheet.values().get(spreadsheetId=ReccID,
