@@ -57,7 +57,7 @@ class FicWriter(commands.Cog):
         all_players = ""
         for i in self.writing[user]["players"]:
             all_players += i["player"].mention + " "
-        messages = ["{}All rounds complete! Here's your fic: ".format(all_players)]
+        messages = ["{}All rounds complete! Bonus cards have been sent out for each sentence you have written. Here's your fic: ".format(all_players)]
         if self.writing[user]["title"] != "":
             messages[0] += "**{}**".format(self.writing[user]["title"])
         messages[0] += "\n"
@@ -248,6 +248,8 @@ class FicWriter(commands.Cog):
                     write["messages"] += [ s ]
                     write["players"][write["p_index"]]["written"] = True
                     await ctx.send("Thanks for posting!")
+                    # Give them a bonus card per round
+                    await self.cards.grant(str(user.id), 1)
                     await self.next_write(i)
                     return
             await ctx.send("Sorry, not expecting you to post a sentence right now!")
