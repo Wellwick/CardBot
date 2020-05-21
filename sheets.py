@@ -49,7 +49,7 @@ async def owned_cards():
 
     return allinfo
 
-async def gain_card(claimer, card_index):
+async def gain_cards(claimer, card_indexes):
     sheet = service.spreadsheets()
     result = sheet.values().get(spreadsheetId=TradingDatabaseID,
                                 range='Owned!A2:B10000').execute()
@@ -64,8 +64,11 @@ async def gain_card(claimer, card_index):
         except:
             break
 
-    data_to_paste = '<table><tr><td>' + claimer + \
-                          '</td><td>' + str(card_index) + '</tr></table>'
+    data_to_paste = "<table>"
+    for i in card_indexes:
+        data_to_paste += "<tr><td>{}</td>".format(claimer)
+        data_to_paste += "<td>{}</td></tr>".format(str(i))
+    data_to_paste += "</table>"
 
     paste_req = {
         "pasteData": {

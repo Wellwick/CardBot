@@ -104,6 +104,7 @@ class Cards(commands.Cog):
         for i in range(0, amount):
             selectedValues += [ random.randrange(0,total) ]
         collected = ""
+        cards = []
         for selectedValue in selectedValues:
             counting = 0
             card = None
@@ -126,9 +127,10 @@ class Cards(commands.Cog):
                 card = self.cardlist[-1]
             if not claimer_id in self.trading:
                 self.trading[claimer_id] = []
-            await sheets.gain_card(claimer_id, self.cardlist.index(card))
+            cards += [ self.cardlist.index(card) ]
             self.trading[claimer_id] += [card]
             collected += card.name + ", "
+        await sheets.gain_cards(claimer_id, cards)
         await ctx.send("You gained the card for {}".format(collected[:-2]))
         if not claimer_id in self.claims[day]:
             self.claims[day] += [ claimer_id ]
@@ -511,7 +513,7 @@ class Cards(commands.Cog):
             r_card_index += [self.cardlist.index(i)]
         await sheets.remove_cards(who, r_card_index)
         self.trading[who] += [selection]
-        await sheets.gain_card(who, self.cardlist.index(selection))
+        await sheets.gain_cards(who, [self.cardlist.index(selection)])
         await ctx.send("Crafted **{}** card".format(selection.name))
 
     @commands.command()
