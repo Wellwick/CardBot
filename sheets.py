@@ -1,6 +1,7 @@
 import pickle, os.path, datetime, random, difflib
 from googleapiclient.discovery import build
 from google.oauth2 import service_account as s_a
+from episode import Episode
 
 SECRET = os.path.join(os.getcwd(), "gsecret.json")
 SCOPES = ['https://www.googleapis.com/auth/drive']
@@ -203,6 +204,53 @@ async def get_bunnies():
         except:
             continue
     return bunnies
+
+async def get_episodes():
+    sheet = service.spreadsheets()
+    episodes_result = sheet.values().get(spreadsheetId=ReccID,
+                                range='Episodes!A2:E1000').execute()
+    episodes_result = episodes_result.get('values', [])
+    episodes = {}
+    for row in episodes_result:
+        try:
+            if str(row[0]) != "":
+                name = str(row[0])
+                website = None
+                spotify = None
+                itunes = None
+                youtube = None
+
+                try:
+                    if str(row[1]) != "":
+                        website = str(row[1])
+                except:
+                    pass
+
+                try:
+                    if str(row[2]) != "":
+                        spotify = str(row[2])
+                except:
+                    pass
+
+                try:
+                    if str(row[3]) != "":
+                        itunes = str(row[3])
+                except:
+                    pass
+
+                try:
+                    if str(row[4]) != "":
+                        youtube = str(row[4])
+                except:
+                    pass
+
+                ep = Episode(name, website, spotify, itunes, youtube)
+                episodes[name.lower()] = ep
+            else:
+                break
+        except:
+            continue
+    return episodes
 
 async def recc_sheet_write(sheet_id, sheet_name, who, recc):
     sheet = service.spreadsheets()

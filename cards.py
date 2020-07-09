@@ -88,7 +88,7 @@ class Cards(commands.Cog):
             await ctx.send("Claiming {} bonus cards".format(self.bonus_claim[claimer_id]))
             amount += self.bonus_claim[claimer_id]
         if not claimer_id in self.claims[day]:
-            amount += 5
+            amount += 2
 
         total = 0
         for i in self.cardlist:
@@ -490,7 +490,7 @@ class Cards(commands.Cog):
         for i in range(0,len(my_cards)):
             for j in self.cardlist:
                 if my_cards[i] == j.name:
-                    if j.rarity == "S":
+                    if j.rarity == "Legendary":
                         await ctx.send("Can't upgrade from Legendary rarity cards")
                         return
                     roll += [upgrade[j.rarity]]
