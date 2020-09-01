@@ -1,5 +1,5 @@
 from PIL import Image, ImageDraw
-import random
+import random, difflib
 
 from discord.ext import commands
 import discord, sheets
@@ -19,10 +19,36 @@ class BingoSheet:
         self.owner = owner
 
     def complete(self) -> bool:
-        for i in self.sheet:
-            if not self.sheet[i]:
-                return False
-        return True
+        row = 0
+        completedRow = True
+        # Check the rows
+        while row < size:
+            index = 0
+            completedRow = True
+            while index < size:
+                card = self.cards[(row*size)+index]
+                if not self.sheet[card]:
+                    break
+                index += 1
+            if completedRow:
+                return True
+            row += 1
+
+        # Check the columns
+        column = 0
+        while column < size:
+            index = 0
+            completedColumn = True
+            while index < size:
+                card = self.cards[(index*size)+column]
+                if not self.sheet[card]:
+                    break
+                index += 1
+            if completedColumn:
+                return True
+            column += 1
+
+        return False
 
     def fill_in(self, card) -> bool:
         # Return true if something gets filled in
@@ -31,7 +57,7 @@ class BingoSheet:
             return True
         return False
 
-    def output_file(self, location):
+    def output_file(self, location) -> discord.File:
         try:
             img = Image.open("BingoSheet.png")
             # Space to work in is 16,20 to 239,235
@@ -85,6 +111,7 @@ class BingoSheet:
                 currentPos += 1
 
             img.save(location)
+            return discord.File(location)
         except Exception as err:
             print("We failed to make the image!")
             print(err)
@@ -113,12 +140,67 @@ class Bingo(commands.Cog):
             bingo_set = random.sample(self.all_cards, size*size)
         self.bingoSheets[user] = BingoSheet(size, bingo_set, user)
 
-    @commands.command()
-    async def make_bingo_sheet(self, ctx, *args):
+    async def make_bingo_sheet(self, ctx):
         """
         A test command to see if making a bingo sheet works!
         """
         user_id = str(ctx.author.id)
         await self.make_sheet(3, user_id)
         self.bingoSheets[user_id].output_file("testfile.png")
-        await ctx.send(file=discord.File("testfile.png"))
+        await ctx.send("Made you a new bingo sheet!", file=discord.File("testfile.png"))
+
+    async def view_sheet(self, ctx):
+        user_id = str(ctx.author.id)
+        if user_id in self.bingoSheets:
+            self.bingoSheets[user_id].output_file("testfile.png")
+            await ctx.send(file=discord.File("testfile.png"))
+        else:
+            await ctx.send("You don't have a bingo sheet currently")
+
+    async def fill_card(self, ctx, card):
+        lowerCase = {}
+        for i in self.all_cards:
+            lowerCase[i.lower()] = i
+        closest_match = difflib.get_close_matches(card, list(lowerCase))
+        if len(closest_match) == 0:
+            await ctx.send("Couldn't find a matching card")
+        else:
+            real_card = lowerCase[closest_match[0]]
+            await ctx.send(f"Filling in all cards for {real_card}")
+            for user in self.bingoSheets:
+                bs = self.bingoSheets[user]
+                if bs.fill_in(real_card):
+                    bs_file = bs.output_file("testfile.png")
+                    if bs.complete():
+                        await ctx.send(f"Bingo! <@{user}>", file=bs_file)
+                    else:
+                        await ctx.send(f"<@{user}>", file=bs_file)
+
+    async def clear_user(self, ctx):
+        user_id = str(ctx.author.id)
+        if user_id in self.bingoSheets:
+            del self.bingoSheets[user_id]
+
+    @commands.command()
+    async def bingo(self, ctx, *, args):
+        """
+        Play some Fanatical Fics bingo.
+        %bingo start - Generate a bingo sheet for yourself!
+        %bingo view - View the current state of your bingo sheet!
+        %bingo fill Card that has been complete - Fill in a card when it happens
+        """
+        await self.check_cache()
+        args = args.strip().lower()
+        if args == "recache":
+            await self.load_bingo_cards()
+        elif args in ["start", "join", "restart"]:
+            await self.make_bingo_sheet(ctx)
+        elif args == "view":
+            await self.view_sheet(ctx)
+        elif args[:4] == fill:
+            await self.fill_card(ctx, args[4:].strip())
+        elif args == "clear":
+            await self.clear_user(ctx)
+        else:
+            await ctx.send("Did not recognise command. Try %help bingo")
+
