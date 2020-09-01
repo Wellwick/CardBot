@@ -205,6 +205,22 @@ async def get_bunnies():
             continue
     return bunnies
 
+async def get_bingo_cards():
+    sheet = service.spreadsheets()
+    works_result = sheet.values().get(spreadsheetId=ReccID,
+                                range='Bingo Cards!A2:A1000').execute()
+    works = works_result.get('values', [])
+    bingo_cards = []
+    for row in works:
+        try:
+            if str(row[0]) != "":
+                bingo_cards += [str(row[0])]
+            else:
+                break
+        except:
+            continue
+    return bingo_cards
+
 async def get_episodes():
     sheet = service.spreadsheets()
     episodes_result = sheet.values().get(spreadsheetId=ReccID,

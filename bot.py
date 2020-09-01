@@ -10,6 +10,7 @@ import asyncio, sys
 import sheets
 import cards, ficwriter
 import episodes
+import bingo
 
 '''My (CardBot's) Main Script
 I'm friendly, and I have commands to support the Fanatical Fics discord
@@ -51,6 +52,7 @@ c = cards.Cards()
 b.add_cog(c)
 b.add_cog(ficwriter.FicWriter(c))
 b.add_cog(episodes.Episodes())
+b.add_cog(bingo.Bingo())
 
 with open('secret') as s:
     token = s.read()[:-1]
