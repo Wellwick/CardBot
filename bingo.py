@@ -191,9 +191,11 @@ class Bingo(commands.Cog):
     async def bingo(self, ctx, *, args):
         """
         Play some Fanatical Fics bingo.
+        %bingo recache - Download fresh bingo squares
         %bingo start - Generate a bingo sheet for yourself!
         %bingo view - View the current state of your bingo sheet!
         %bingo fill Card that has been complete - Fill in a card when it happens
+        %bingo clear - Remove your bingo card
         """
         await self.check_cache()
         args = args.strip().lower()
