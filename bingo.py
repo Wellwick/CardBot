@@ -21,6 +21,7 @@ class BingoSheet:
     def complete(self) -> bool:
         row = 0
         completedRow = True
+        size = self.size
         # Check the rows
         while row < size:
             index = 0
@@ -133,7 +134,7 @@ class Bingo(commands.Cog):
     async def make_sheet(self, size, user, free_space=True):
         await self.check_cache()
         if free_space and "Free Space" in self.all_cards:
-            bingo_set = random.sample(self.all_cards, size*size-1)
+            bingo_set = random.sample(self.all_cards[1:], size*size-1)
             midpoint = int(size*size/2)
             bingo_set = bingo_set[:midpoint] + ["Free Space"] + bingo_set[midpoint:]
         else:
