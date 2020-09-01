@@ -180,6 +180,9 @@ class Bingo(commands.Cog):
         user_id = str(ctx.author.id)
         if user_id in self.bingoSheets:
             del self.bingoSheets[user_id]
+            await ctx.send("Your sheet has been cleared")
+        else:
+            await ctx.send("You didn't have a bingo sheet!")
 
     @commands.command()
     async def bingo(self, ctx, *, args):
@@ -197,7 +200,7 @@ class Bingo(commands.Cog):
             await self.make_bingo_sheet(ctx)
         elif args == "view":
             await self.view_sheet(ctx)
-        elif args[:4] == fill:
+        elif args[:4] == "fill":
             await self.fill_card(ctx, args[4:].strip())
         elif args == "clear":
             await self.clear_user(ctx)
