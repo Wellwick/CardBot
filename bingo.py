@@ -115,6 +115,9 @@ class Bingo(commands.Cog):
 
     @commands.command()
     async def make_bingo_sheet(self, ctx, *args):
+        """
+        A test command to see if making a bingo sheet works!
+        """
         user_id = str(ctx.author.id)
         await self.make_sheet(3, user_id)
         self.bingoSheets[user_id].output_file("testfile.png")
