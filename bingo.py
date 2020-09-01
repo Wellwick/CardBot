@@ -29,6 +29,7 @@ class BingoSheet:
             while index < size:
                 card = self.cards[(row*size)+index]
                 if not self.sheet[card]:
+                    completedRow = False
                     break
                 index += 1
             if completedRow:
@@ -43,6 +44,7 @@ class BingoSheet:
             while index < size:
                 card = self.cards[(index*size)+column]
                 if not self.sheet[card]:
+                    completedColumn = False
                     break
                 index += 1
             if completedColumn:
