@@ -160,7 +160,7 @@ class Bingo(commands.Cog):
         else:
             await ctx.send("You don't have a bingo sheet currently")
 
-    async def fill_card(self, ctx, card):
+    async def fill_card(self, ctx, card, fill_all=False):
         lowerCase = {}
         for i in self.all_cards:
             lowerCase[i.lower()] = i
@@ -170,7 +170,20 @@ class Bingo(commands.Cog):
         else:
             real_card = lowerCase[closest_match[0]]
             await ctx.send(f"Filling in all cards for {real_card}")
-            for user in self.bingoSheets:
+            if fill_all:
+                for user in self.bingoSheets:
+                    bs = self.bingoSheets[user]
+                    if bs.fill_in(real_card):
+                        bs_file = bs.output_file("testfile.png")
+                        if bs.complete():
+                            await ctx.send(f"Bingo! <@{user}>", file=bs_file)
+                        else:
+                            await ctx.send(f"<@{user}>", file=bs_file)
+            else:
+                user = str(ctx.author.id)
+                if not user in self.bingoSheets:
+                    await ctx.send("You don't have a bingo sheet yet, try %bingo start")
+                    return
                 bs = self.bingoSheets[user]
                 if bs.fill_in(real_card):
                     bs_file = bs.output_file("testfile.png")
@@ -194,7 +207,8 @@ class Bingo(commands.Cog):
         %bingo recache - Download fresh bingo squares
         %bingo start - Generate a bingo sheet for yourself!
         %bingo view - View the current state of your bingo sheet!
-        %bingo fill Card that has been complete - Fill in a card when it happens
+        %bingo fill Card that has been complete - Fill in a card when it happens just for you
+        %bingo fillall Card that has been complete - Fill in a card when it happens for everyone playing!
         %bingo clear - Remove your bingo card
         """
         await self.check_cache()
@@ -207,6 +221,8 @@ class Bingo(commands.Cog):
             await self.view_sheet(ctx)
         elif args[:4] == "fill":
             await self.fill_card(ctx, args[4:].strip())
+        elif args[:4] == "fillall":
+            await self.fill_card(ctx, args[4:].strip(), fill_all=True)
         elif args == "clear":
             await self.clear_user(ctx)
         else:
