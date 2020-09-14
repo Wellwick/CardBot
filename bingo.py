@@ -169,8 +169,8 @@ class Bingo(commands.Cog):
             await ctx.send("Couldn't find a matching card")
         else:
             real_card = lowerCase[closest_match[0]]
-            await ctx.send(f"Filling in all cards for {real_card}")
             if fill_all:
+                await ctx.send(f"Filling in all cards for {real_card}")
                 for user in self.bingoSheets:
                     bs = self.bingoSheets[user]
                     if bs.fill_in(real_card):
@@ -180,6 +180,7 @@ class Bingo(commands.Cog):
                         else:
                             await ctx.send(f"<@{user}>", file=bs_file)
             else:
+                await ctx.send(f"Filling in card for {real_card}")
                 user = str(ctx.author.id)
                 if not user in self.bingoSheets:
                     await ctx.send("You don't have a bingo sheet yet, try %bingo start")
