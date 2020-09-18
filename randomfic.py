@@ -35,9 +35,9 @@ class RandomFic(commands.Cog):
         author = User(id=story.author_id)
         author.download_data()
 
-        info = f"**{story.title}** by *{author.username}*\n"
-        info += f"Link: *<{story.url}>*\n"
-        info += f"Chapter {chapter_val}"
+        info = f"> **{story.title}** by *{author.username}*\n"
+        info += f"> Link: *<{story.url}>*\n"
+        info += f"> Chapter {chapter_val}"
 
         lines = chapter.text.split("\n")
 
@@ -66,14 +66,14 @@ class RandomFic(commands.Cog):
         current_string = ""
         index = 0
         for line in print_lines:
-            new_line = f"{current_line}\n> {line}"
+            new_line = f"{current_line}\n\n{line}"
             if len(new_line) < 2000:
                 current_line = new_line
             else:
                 await ctx.send(current_line)
                 current_line = f"> {line}"
         
-        new_line = f"{current_line}\n{info}"
+        new_line = f"{current_line}\n\n{info}"
         if len(new_line) < 2000:
             await ctx.send(new_line)
         else:
