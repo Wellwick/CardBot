@@ -71,7 +71,7 @@ class RandomFic(commands.Cog):
                 current_line = new_line
             else:
                 await ctx.send(current_line)
-                current_line = f"> {line}"
+                current_line = f"{line}"
         
         new_line = f"{current_line}\n\n{info}"
         if len(new_line) < 2000:
