@@ -34,7 +34,7 @@ class RandomFic(commands.Cog):
         return info
 
     def ffChapterLines(self, story, chapter):
-        chapter = Chapter(story_id=story.id, chapter=chapter_val)
+        chapter = Chapter(story_id=story.id, chapter=chapter)
         return chapter.text.split("\n")
 
     def ao3PickChapter(self, work):
@@ -54,7 +54,7 @@ class RandomFic(commands.Cog):
         return work.get_chapter_text(chapter).split("\n")
 
     @commands.command()
-    async def quote(self, ctx, linecount=3, website="any"):
+    async def quote(self, ctx, website="any", linecount=3):
         '''Pulls a random quote from a HP story somewhere on fanfiction.net!
         - Change linecount to decide how long you want the quote to be
         - Change website to ao3 or ff to only get things from ao3 or fanfiction.net
@@ -87,7 +87,7 @@ class RandomFic(commands.Cog):
             info = self.ffInfo(story, chapter)
             lines = self.ffChapterLines(story, chapter)
         elif website.lower() == "ao3":
-            work = AO3.Work(self.ao3ids[counter])
+            work = AO3.Work(random.choice(self.ao3ids))
             chapter = self.ao3PickChapter(work)
             info = self.ao3Info(work, chapter)
             lines = self.ao3ChapterLines(work, chapter)
