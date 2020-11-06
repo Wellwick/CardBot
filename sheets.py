@@ -224,7 +224,7 @@ async def get_bingo_cards():
 async def get_episodes():
     sheet = service.spreadsheets()
     episodes_result = sheet.values().get(spreadsheetId=ReccID,
-                                range='Episodes!A2:E1000').execute()
+                                range='Episodes!A2:F1000').execute()
     episodes_result = episodes_result.get('values', [])
     episodes = {}
     for row in episodes_result:
@@ -235,6 +235,7 @@ async def get_episodes():
                 spotify = None
                 itunes = None
                 youtube = None
+                direct = None
 
                 try:
                     if str(row[1]) != "":
@@ -260,7 +261,13 @@ async def get_episodes():
                 except:
                     pass
 
-                ep = Episode(name, website, spotify, itunes, youtube)
+                try:
+                    if str(row[5]) != "":
+                        direct = str(row[5])
+                except:
+                    pass
+
+                ep = Episode(name, website, spotify, itunes, youtube, direct)
                 episodes[name.lower()] = ep
             else:
                 break

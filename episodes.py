@@ -24,6 +24,9 @@ class Episodes(commands.Cog):
                 output += f"> **Itunes**: <{episode.itunes}>\n"
             if episode.youtube:
                 output += f"> **Youtube**: <{episode.youtube}>\n"
+            if episode.direct:
+                output += f"> **Direct**: <{episode.direct}>\n"
+                output += f"> To listen with the <@234395307759108106> bot type `-play {episode.direct}`\n"
             if len(matching) > 1:
                 titles = []
                 for i in matching[1:]:
