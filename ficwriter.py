@@ -334,7 +334,7 @@ class FicWriter(commands.Cog):
                 max_object = len(max(objects + ["Object"], key=len)) + 1
                 row_length = max_pair1 + max_pair2 + max_obstacle + max_place + max_time + max_object + 11
 
-                output = "```Character 1"
+                output = "``` Character 1"
                 output += self.multiply_string(" ", max_pair1 - 11) + "| "
                 output += "Character 2"
                 output += self.multiply_string(" ", max_pair2 - 11) + "| "
@@ -346,7 +346,7 @@ class FicWriter(commands.Cog):
                 output += self.multiply_string(" ", max_time - 4) + "| "
                 output += "Object"
                 output += self.multiply_string(" ", max_object - 6) + "\n"
-                output += self.multiply_string("-", row_length) + "\n"
+                output += self.multiply_string("-", row_length) + "\n "
                 for i in range(0,rows):
                     # Check if the row is empty
                     if pair1[i] == pair2[i] == obstacle[i] == place[i] == time[i] == objects[i] == "":
@@ -354,7 +354,7 @@ class FicWriter(commands.Cog):
                     if len(output) + row_length > 1996:
                         output += "```"
                         await ctx.send(output)
-                        output = "```"
+                        output = "``` "
                     output += pair1[i]
                     output += self.multiply_string(" ", max_pair1 - len(pair1[i])) + "| "
                     output += pair2[i]
@@ -366,7 +366,7 @@ class FicWriter(commands.Cog):
                     output += time[i]
                     output += self.multiply_string(" ", max_time - len(time[i])) + "| "
                     output += objects[i]
-                    output += self.multiply_string(" ", max_object - len(objects[i])) + "\n"
+                    output += self.multiply_string(" ", max_object - len(objects[i])) + "\n "
                     
                 output += "```"
                 await ctx.send(output)
