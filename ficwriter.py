@@ -287,7 +287,7 @@ class FicWriter(commands.Cog):
                     pair1 = self.morphologische["character"]
                     random.shuffle(self.morphologische["character"])
                     pair2 = self.morphologische["character"]
-                    for i in range(len(self.morphologische["character"], rows)):
+                    for i in range(len(self.morphologische["character"]), rows):
                         pair1 += [""]
                         pair2 += [""]
                 else:
@@ -297,7 +297,7 @@ class FicWriter(commands.Cog):
                 if len(self.morphologische["obstacle"]) < rows:
                     random.shuffle(self.morphologische["obstacle"])
                     obstacle = self.morphologische["obstacle"]
-                    for i in range(len(self.morphologische["obstacle"], rows)):
+                    for i in range(len(self.morphologische["obstacle"]), rows):
                         obstacle += [""]
                 else:
                     obstacle = random.sample(self.morphologische["obstacle"], rows)
@@ -305,7 +305,7 @@ class FicWriter(commands.Cog):
                 if len(self.morphologische["place"]) < rows:
                     random.shuffle(self.morphologische["place"])
                     place = self.morphologische["place"]
-                    for i in range(len(self.morphologische["place"], rows)):
+                    for i in range(len(self.morphologische["place"]), rows):
                         place += [""]
                 else:
                     place = random.sample(self.morphologische["place"], rows)
@@ -313,7 +313,7 @@ class FicWriter(commands.Cog):
                 if len(self.morphologische["time"]) < rows:
                     random.shuffle(self.morphologische["time"])
                     time = self.morphologische["time"]
-                    for i in range(len(self.morphologische["time"], rows)):
+                    for i in range(len(self.morphologische["time"]), rows):
                         time += [""]
                 else:
                     time = random.sample(self.morphologische["time"], rows)
@@ -321,7 +321,7 @@ class FicWriter(commands.Cog):
                 if len(self.morphologische["object"]) < rows:
                     random.shuffle(self.morphologische["object"])
                     objects = self.morphologische["object"]
-                    for i in range(len(self.morphologische["object"], rows)):
+                    for i in range(len(self.morphologische["object"]), rows):
                         objects += [""]
                 else:
                     objects = random.sample(self.morphologische["object"], rows)
