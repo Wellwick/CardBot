@@ -254,6 +254,9 @@ async def get_morphologische():
         except:
             pass
         
+        if row_empty:
+            break
+
     return morph
 
 async def get_bingo_cards():
