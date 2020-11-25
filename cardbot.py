@@ -17,7 +17,10 @@ import randomfic
 I'm friendly, and I have commands to support the Fanatical Fics discord
 '''
 
-b = commands.Bot(command_prefix=('%'),  case_insensitive=True)
+intents = discord.Intents.default()
+intents.members = True
+
+b = commands.Bot(command_prefix=('%'),  case_insensitive=True, intents=intents)
 
 @b.command()
 async def hi(ctx, *args):
@@ -33,7 +36,7 @@ async def members(ctx, *args):
                  "Hufflepuff": 0,
                  "Ravenclaw": 0,
                  "Slytherin": 0,
-                 "Unsorted": -3}
+                 "Unsorted": 0}
     for user in ctx.channel.members:
         if user.bot:
             continue

@@ -21,7 +21,7 @@ class FicWriter(commands.Cog):
         self.bunnies = await sheets.get_bunnies()
 
     async def load_morphologische(self):
-        self.bunnies = await sheets.get_morphologische()
+        self.morphologische = await sheets.get_morphologische()
 
     async def player_present(self, user, player):
         for i in self.writing[user]["players"]:
@@ -260,7 +260,7 @@ class FicWriter(commands.Cog):
             await ctx.send("Sorry, not expecting you to post a sentence right now!")
 
     @commands.command()
-    async def prompt(self, ctx, *, arguments):
+    async def prompt(self, ctx, *args):
         await self.check_cache()
         if len(args) == 1 and args[0].lower() == "recache":
             await self.load_morphologische()
@@ -268,11 +268,11 @@ class FicWriter(commands.Cog):
             pair1 = random.choice(self.morphologische["character"])
             pair2 = random.choice(self.morphologische["character"])
             obstacle = random.choice(self.morphologische["obstacle"])
-            location = random.choice(self.morphologische["location"])
+            place = random.choice(self.morphologische["place"])
             time = random.choice(self.morphologische["time"])
             output = f"> **Pairing**: {pair1}/{pair2}\n"
             output += f"> **Obstacle**: {obstacle}\n"
-            output += f"> **Location**: {location}\n"
+            output += f"> **Location**: {place}\n"
             output += f"> **Time**: {time}\n"
             await ctx.send(output)
 
