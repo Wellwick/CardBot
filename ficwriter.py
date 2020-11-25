@@ -325,6 +325,7 @@ class FicWriter(commands.Cog):
                 output += self.multiply_string(" ", max_place - 5) + "| "
                 output += "Time"
                 output += self.multiply_string(" ", max_time - 4) + "\n"
+                output += self.multiply_string("-", row_length) + "\n"
                 for i in range(0,rows):
                     # Check if the row is empty
                     if pair1[i] == pair2[i] == obstacle[i] == place[i] == time[i] == "":
@@ -342,7 +343,7 @@ class FicWriter(commands.Cog):
                     output += place[i]
                     output += self.multiply_string(" ", max_place - len(place[i])) + "| "
                     output += time[i]
-                    output += self.multiply_string(" ", max_time - len(time[i])) + "| "
+                    output += self.multiply_string(" ", max_time - len(time[i])) + "\n"
                     
                 output += "```"
                 await ctx.send(output)
