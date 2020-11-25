@@ -268,7 +268,9 @@ class FicWriter(commands.Cog):
 
     @commands.command()
     async def prompt(self, ctx, *args):
-        '''Prompt 
+        '''Produce a prompt for your writing
+            %prompt - Produce a random prompt
+            %prompt 3 - Produce a table of 3 (or any number) of rows of prompt options
         '''
         await self.check_cache()
         if len(args) == 1:
