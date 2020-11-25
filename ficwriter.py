@@ -283,10 +283,10 @@ class FicWriter(commands.Cog):
                 rows = int(args[0])
 
                 if len(self.morphologische["character"]) < rows:
-                    random.shuffle(self.morphologische["character"])
                     pair1 = self.morphologische["character"]
-                    random.shuffle(self.morphologische["character"])
-                    pair2 = self.morphologische["character"]
+                    pair2 = pair1
+                    random.shuffle(pair1)
+                    random.shuffle(pair2)
                     for i in range(len(self.morphologische["character"]), rows):
                         pair1 += [""]
                         pair2 += [""]
