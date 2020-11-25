@@ -205,6 +205,49 @@ async def get_bunnies():
             continue
     return bunnies
 
+async def get_morphologische():
+    sheet = service.spreadsheets()
+    works_result = sheet.values().get(spreadsheetId=ReccID,
+                                range='Morphologische!A2:D1000').execute()
+    works = works_result.get('values', [])
+    morph = {
+        "character": [],
+        "obstacle": [],
+        "place": [],
+        "time": []
+    }
+    for row in works:
+        row_empty = True
+        try:
+            if str(row[0]) != "":
+                morph["character"] += [str(row[0])]
+                row_empty = False
+        except:
+            pass
+
+        try:
+            if str(row[1]) != "":
+                morph["obstacle"] += [str(row[1])]
+                row_empty = False
+        except:
+            pass
+            
+        try:
+            if str(row[2]) != "":
+                morph["place"] += [str(row[2])]
+                row_empty = False
+        except:
+            pass
+            
+        try:
+            if str(row[3]) != "":
+                morph["time"] += [str(row[3])]
+                row_empty = False
+        except:
+            pass
+        
+    return morph
+
 async def get_bingo_cards():
     sheet = service.spreadsheets()
     works_result = sheet.values().get(spreadsheetId=ReccID,
