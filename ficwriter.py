@@ -259,11 +259,95 @@ class FicWriter(commands.Cog):
                     return
             await ctx.send("Sorry, not expecting you to post a sentence right now!")
 
+    def multiply_string(self, string, multiple):
+        new_string = ""
+        for i in range(0,multiple):
+            new_string += string
+            
+        return new_string
+
     @commands.command()
     async def prompt(self, ctx, *args):
+        '''Prompt 
+        '''
         await self.check_cache()
-        if len(args) == 1 and args[0].lower() == "recache":
-            await self.load_morphologische()
+        if len(args) == 1:
+            if args[0].lower() == "recache":
+                await self.load_morphologische()
+            try:
+                rows = int(args[0])
+
+                if len(self.morphologische["character"]) < rows:
+                    pair1 = random.shuffle(self.morphologische["character"])
+                    pair2 = random.shuffle(self.morphologische["character"])
+                    for i in range(len(self.morphologische["character"], rows)):
+                        pair1 += [""]
+                        pair2 += [""]
+                else:
+                    pair1 = random.sample(self.morphologische["character"], rows)
+                    pair2 = random.sample(self.morphologische["character"], rows)
+                
+                if len(self.morphologische["obstacle"]) < rows:
+                    obstacle = random.shuffle(self.morphologische["obstacle"])
+                    for i in range(len(self.morphologische["obstacle"], rows)):
+                        obstacle += [""]
+                else:
+                    obstacle = random.sample(self.morphologische["obstacle"], rows)
+                
+                if len(self.morphologische["place"]) < rows:
+                    place = random.shuffle(self.morphologische["place"])
+                    for i in range(len(self.morphologische["place"], rows)):
+                        place += [""]
+                else:
+                    place = random.sample(self.morphologische["place"], rows)
+                
+                if len(self.morphologische["time"]) < rows:
+                    time = random.shuffle(self.morphologische["time"])
+                    for i in range(len(self.morphologische["time"], rows)):
+                        time += [""]
+                else:
+                    time = random.sample(self.morphologische["time"], rows)
+
+                max_pair1 = len(max(pair1 + ["Pair1"], key=len)) + 1
+                max_pair2 = len(max(pair2 + ["Pair2"], key=len)) + 1
+                max_obstacle = len(max(obstacle + ["Obstacle"], key=len)) + 1
+                max_place = len(max(place + ["Place"], key=len)) + 1
+                max_time = len(max(time + ["Time"], key=len)) + 1
+                row_length = max_pair1 + max_pair2 + max_obstacle + max_place + max_time + 9
+
+                output = "```Pair1"
+                output += self.multiply_string(" ", max_pair1 - 5) + "| "
+                output += "Pair2"
+                output += self.multiply_string(" ", max_pair2 - 5) + "| "
+                output += "Obstacle"
+                output += self.multiply_string(" ", max_obstacle - 8) + "| "
+                output += "Place"
+                output += self.multiply_string(" ", max_place - 5) + "| "
+                output += "Time"
+                output += self.multiply_string(" ", max_time - 4) + "\n"
+                for i in range(0,rows):
+                    # Check if the row is empty
+                    if pair1[i] == pair2[i] == obstacle[i] == place[i] == time[i] == "":
+                        break
+                    if len(output) + row_length > 1996:
+                        output += "```"
+                        await ctx.send(output)
+                        output = "```"
+                    output += pair1[i]
+                    output += self.multiply_string(" ", max_pair1 - len(pair1[i])) + "| "
+                    output += pair2[i]
+                    output += self.multiply_string(" ", max_pair2 - len(pair2[i])) + "| "
+                    output += obstacle[i]
+                    output += self.multiply_string(" ", max_obstacle - len(obstacle[i])) + "| "
+                    output += place[i]
+                    output += self.multiply_string(" ", max_place - len(place[i])) + "| "
+                    output += time[i]
+                    output += self.multiply_string(" ", max_time - len(time[i])) + "| "
+                    
+                output += "```"
+                await ctx.send(output)
+            except:
+                await ctx.send("Failed to make this many table rows")
         else:
             pair1 = random.choice(self.morphologische["character"])
             pair2 = random.choice(self.morphologische["character"])
@@ -272,7 +356,7 @@ class FicWriter(commands.Cog):
             time = random.choice(self.morphologische["time"])
             output = f"> **Pairing**: {pair1}/{pair2}\n"
             output += f"> **Obstacle**: {obstacle}\n"
-            output += f"> **Location**: {place}\n"
+            output += f"> **Place**: {place}\n"
             output += f"> **Time**: {time}\n"
             await ctx.send(output)
 
