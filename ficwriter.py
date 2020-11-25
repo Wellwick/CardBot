@@ -271,6 +271,7 @@ class FicWriter(commands.Cog):
         '''Produce a prompt for your writing
             %prompt - Produce a random prompt
             %prompt 3 - Produce a table of 3 (or any number) of rows of prompt options
+            %prompt recache - Reload things from the spreadsheet https://docs.google.com/spreadsheets/d/1MYxwMMXpNfx22gsbPmKLlkPh30NZNXeKSMBo96s7knc/edit#gid=993001934
         '''
         await self.check_cache()
         if len(args) == 1:
