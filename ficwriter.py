@@ -276,12 +276,14 @@ class FicWriter(commands.Cog):
         if len(args) == 1:
             if args[0].lower() == "recache":
                 await self.load_morphologische()
+                await ctx.send("Recache complete!")
+                return
             try:
                 rows = int(args[0])
 
                 if len(self.morphologische["character"]) < rows:
-                    pair1 = random.shuffle(self.morphologische["character"])
-                    pair2 = random.shuffle(self.morphologische["character"])
+                    pair1 = random.sample(self.morphologische["character"], len(self.morphologische["character"]))
+                    pair2 = random.sample(self.morphologische["character"], len(self.morphologische["character"]))
                     for i in range(len(self.morphologische["character"], rows)):
                         pair1 += [""]
                         pair2 += [""]
@@ -290,28 +292,28 @@ class FicWriter(commands.Cog):
                     pair2 = random.sample(self.morphologische["character"], rows)
                 
                 if len(self.morphologische["obstacle"]) < rows:
-                    obstacle = random.shuffle(self.morphologische["obstacle"])
+                    obstacle = random.sample(self.morphologische["obstacle"], len(self.morphologische["obstacle"]))
                     for i in range(len(self.morphologische["obstacle"], rows)):
                         obstacle += [""]
                 else:
                     obstacle = random.sample(self.morphologische["obstacle"], rows)
                 
                 if len(self.morphologische["place"]) < rows:
-                    place = random.shuffle(self.morphologische["place"])
+                    place = random.sample(self.morphologische["place"], len(self.morphologische["place"]))
                     for i in range(len(self.morphologische["place"], rows)):
                         place += [""]
                 else:
                     place = random.sample(self.morphologische["place"], rows)
                 
                 if len(self.morphologische["time"]) < rows:
-                    time = random.shuffle(self.morphologische["time"])
+                    time = random.sample(self.morphologische["time"], len(self.morphologische["time"]))
                     for i in range(len(self.morphologische["time"], rows)):
                         time += [""]
                 else:
                     time = random.sample(self.morphologische["time"], rows)
                 
                 if len(self.morphologische["object"]) < rows:
-                    objects = random.shuffle(self.morphologische["object"])
+                    objects = random.sample(self.morphologische["object"], len(self.morphologische["object"]))
                     for i in range(len(self.morphologische["object"], rows)):
                         objects += [""]
                 else:
