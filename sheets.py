@@ -208,13 +208,14 @@ async def get_bunnies():
 async def get_morphologische():
     sheet = service.spreadsheets()
     works_result = sheet.values().get(spreadsheetId=ReccID,
-                                range='Morphologische!A2:D1000').execute()
+                                range='Morphologische!A2:E1000').execute()
     works = works_result.get('values', [])
     morph = {
         "character": [],
         "obstacle": [],
         "place": [],
-        "time": []
+        "time": [],
+        "object": []
     }
     for row in works:
         row_empty = True
@@ -242,6 +243,13 @@ async def get_morphologische():
         try:
             if str(row[3]) != "":
                 morph["time"] += [str(row[3])]
+                row_empty = False
+        except:
+            pass
+            
+        try:
+            if str(row[4]) != "":
+                morph["object"] += [str(row[4])]
                 row_empty = False
         except:
             pass

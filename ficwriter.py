@@ -307,13 +307,21 @@ class FicWriter(commands.Cog):
                         time += [""]
                 else:
                     time = random.sample(self.morphologische["time"], rows)
+                
+                if len(self.morphologische["object"]) < rows:
+                    objects = random.shuffle(self.morphologische["object"])
+                    for i in range(len(self.morphologische["object"], rows)):
+                        objects += [""]
+                else:
+                    objects = random.sample(self.morphologische["object"], rows)
 
                 max_pair1 = len(max(pair1 + ["Pair1"], key=len)) + 1
                 max_pair2 = len(max(pair2 + ["Pair2"], key=len)) + 1
                 max_obstacle = len(max(obstacle + ["Obstacle"], key=len)) + 1
                 max_place = len(max(place + ["Place"], key=len)) + 1
                 max_time = len(max(time + ["Time"], key=len)) + 1
-                row_length = max_pair1 + max_pair2 + max_obstacle + max_place + max_time + 9
+                max_object = len(max(objects + ["Object"], key=len)) + 1
+                row_length = max_pair1 + max_pair2 + max_obstacle + max_place + max_time + max_object + 11
 
                 output = "```Pair1"
                 output += self.multiply_string(" ", max_pair1 - 5) + "| "
@@ -324,11 +332,13 @@ class FicWriter(commands.Cog):
                 output += "Place"
                 output += self.multiply_string(" ", max_place - 5) + "| "
                 output += "Time"
-                output += self.multiply_string(" ", max_time - 4) + "\n"
+                output += self.multiply_string(" ", max_time - 4) + "| "
+                output += "Object"
+                output += self.multiply_string(" ", max_object - 6) + "\n"
                 output += self.multiply_string("-", row_length) + "\n"
                 for i in range(0,rows):
                     # Check if the row is empty
-                    if pair1[i] == pair2[i] == obstacle[i] == place[i] == time[i] == "":
+                    if pair1[i] == pair2[i] == obstacle[i] == place[i] == time[i] == objects[i] == "":
                         break
                     if len(output) + row_length > 1996:
                         output += "```"
@@ -343,7 +353,9 @@ class FicWriter(commands.Cog):
                     output += place[i]
                     output += self.multiply_string(" ", max_place - len(place[i])) + "| "
                     output += time[i]
-                    output += self.multiply_string(" ", max_time - len(time[i])) + "\n"
+                    output += self.multiply_string(" ", max_time - len(time[i])) + "| "
+                    output += objects[i]
+                    output += self.multiply_string(" ", max_object - len(objects[i])) + "\n"
                     
                 output += "```"
                 await ctx.send(output)
@@ -355,9 +367,11 @@ class FicWriter(commands.Cog):
             obstacle = random.choice(self.morphologische["obstacle"])
             place = random.choice(self.morphologische["place"])
             time = random.choice(self.morphologische["time"])
+            c_object = random.choice(self.morphologische["object"])
             output = f"> **Pairing**: {pair1}/{pair2}\n"
             output += f"> **Obstacle**: {obstacle}\n"
             output += f"> **Place**: {place}\n"
             output += f"> **Time**: {time}\n"
+            output += f"> **Object**: {c_object}\n"
             await ctx.send(output)
 
