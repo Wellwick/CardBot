@@ -326,18 +326,18 @@ class FicWriter(commands.Cog):
                 else:
                     objects = random.sample(self.morphologische["object"], rows)
 
-                max_pair1 = len(max(pair1 + ["Pair1"], key=len)) + 1
-                max_pair2 = len(max(pair2 + ["Pair2"], key=len)) + 1
+                max_pair1 = len(max(pair1 + ["Character 1"], key=len)) + 1
+                max_pair2 = len(max(pair2 + ["Character 2"], key=len)) + 1
                 max_obstacle = len(max(obstacle + ["Obstacle"], key=len)) + 1
                 max_place = len(max(place + ["Place"], key=len)) + 1
                 max_time = len(max(time + ["Time"], key=len)) + 1
                 max_object = len(max(objects + ["Object"], key=len)) + 1
                 row_length = max_pair1 + max_pair2 + max_obstacle + max_place + max_time + max_object + 11
 
-                output = "```Pair1"
-                output += self.multiply_string(" ", max_pair1 - 5) + "| "
-                output += "Pair2"
-                output += self.multiply_string(" ", max_pair2 - 5) + "| "
+                output = "```Character 1"
+                output += self.multiply_string(" ", max_pair1 - 11) + "| "
+                output += "Character 2"
+                output += self.multiply_string(" ", max_pair2 - 11) + "| "
                 output += "Obstacle"
                 output += self.multiply_string(" ", max_obstacle - 8) + "| "
                 output += "Place"
@@ -379,7 +379,7 @@ class FicWriter(commands.Cog):
             place = random.choice(self.morphologische["place"])
             time = random.choice(self.morphologische["time"])
             c_object = random.choice(self.morphologische["object"])
-            output = f"> **Pairing**: {pair1}/{pair2}\n"
+            output = f"> **Characters**: {pair1}, {pair2}\n"
             output += f"> **Obstacle**: {obstacle}\n"
             output += f"> **Place**: {place}\n"
             output += f"> **Time**: {time}\n"
