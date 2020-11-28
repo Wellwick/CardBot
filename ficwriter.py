@@ -331,7 +331,7 @@ class FicWriter(commands.Cog):
                 max_obstacle = len(max(obstacle + ["Obstacle"], key=len)) + 1
                 max_place = len(max(place + ["Place"], key=len)) + 1
                 max_time = len(max(time + ["Time"], key=len)) + 1
-                max_object = len(max(objects + ["Object"], key=len)) + 1
+                max_object = len(max(objects + ["Plot Device"], key=len)) + 1
                 row_length = max_pair1 + max_pair2 + max_obstacle + max_place + max_time + max_object + 11
 
                 output = "``` Character 1"
@@ -344,8 +344,8 @@ class FicWriter(commands.Cog):
                 output += self.multiply_string(" ", max_place - 5) + "| "
                 output += "Time"
                 output += self.multiply_string(" ", max_time - 4) + "| "
-                output += "Object"
-                output += self.multiply_string(" ", max_object - 6) + "\n"
+                output += "Plot Device"
+                output += self.multiply_string(" ", max_object - 11) + "\n"
                 output += self.multiply_string("-", row_length) + "\n"
                 for i in range(0,rows):
                     # Check if the row is empty
@@ -383,6 +383,6 @@ class FicWriter(commands.Cog):
             output += f"> **Obstacle**: {obstacle}\n"
             output += f"> **Place**: {place}\n"
             output += f"> **Time**: {time}\n"
-            output += f"> **Object**: {c_object}\n"
+            output += f"> **Plot Device**: {c_object}\n"
             await ctx.send(output)
 
