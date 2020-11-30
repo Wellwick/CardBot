@@ -530,6 +530,16 @@ class Cards(commands.Cog):
         
         crafted = False
 
+        upgrade = {"Common": "Uncommon", "Uncommon": "Rare", "Rare": "Legendary"}
+        rarity_sorted = {}
+        gained = {}
+        r_card_index = []
+
+        for i in self.cardlist:
+            if i.rarity not in rarity_sorted:
+                rarity_sorted[i.rarity] = []
+            rarity_sorted[i.rarity] += [i]
+
         for rarity in owned:
             # We're looking for a collection of three things!
             group = []
@@ -538,15 +548,36 @@ class Cards(commands.Cog):
                     owned[rarity][card] -= 1
                     group += [card]
                     if len(group) == 3:
-                        # Pretend this is a string being passed into the craft
-                        # function
-                        group_string = f"[{group[0].name}, {group[1].name}, {group[2].name}]"
-                        await self.craft(ctx, who, group_string)
+                        crafted_card = random.choice(rarity_sorted[upgrade[rarity]])
+                        if upgrade[rarity] not in gained:
+                            gained[upgrade[rarity]] = []
+                        gained[upgrade[rarity]] += [crafted_card]
+                        r_card_index += [self.cardlist.index(group[0])]
+                        r_card_index += [self.cardlist.index(group[1])]
+                        r_card_index += [self.cardlist.index(group[2])]
                         crafted = True
                         group = []
         
         if not crafted:
             await ctx.send("Couldn't find enough duplicate cards to craft together")
+        else:
+            string = "Auto-crafting complete!\n"
+            for rarity in gained:
+                r_string = f"**{rarity}**:\n> "
+                for i in gained[rarity]:
+                    r_string += f"{i.name}, "
+                r_string = r_string[-2] + "\n"
+                if len(string + r_string) > 1999:
+                    await ctx.send(string)
+                    string = r_string
+                else:
+                    string += r_string
+            await ctx.send(string)
+            await sheets.remove_cards(who, r_card_index)
+            gain_list = []
+            for i in gained:
+                gain_list += gained[i]
+            await sheets.gain_cards(who, gain_list)
 
     @commands.command()
     async def tc(self, ctx, action, *args):
