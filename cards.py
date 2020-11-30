@@ -552,9 +552,9 @@ class Cards(commands.Cog):
                         if upgrade[rarity] not in gained:
                             gained[upgrade[rarity]] = []
                         gained[upgrade[rarity]] += [crafted_card]
-                        r_card_index += [self.cardlist.index(group[0])]
-                        r_card_index += [self.cardlist.index(group[1])]
-                        r_card_index += [self.cardlist.index(group[2])]
+                        for i in group:
+                            r_card_index += [self.cardlist.index(i)]
+                            self.trading[who].remove(i)
                         crafted = True
                         group = []
         
@@ -566,7 +566,7 @@ class Cards(commands.Cog):
                 r_string = f"**{rarity}**:\n> "
                 for i in gained[rarity]:
                     r_string += f"{i.name}, "
-                r_string = r_string[-2] + "\n"
+                r_string = r_string[:-2] + "\n"
                 if len(string + r_string) > 1999:
                     await ctx.send(string)
                     string = r_string
@@ -576,6 +576,7 @@ class Cards(commands.Cog):
             await sheets.remove_cards(who, r_card_index)
             gain_list = []
             for i in gained:
+                self.trading[who] += gained[i]
                 for card in gained[i]:
                     gain_list += [self.cardlist.index(card)]
             await sheets.gain_cards(who, gain_list)
