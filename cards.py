@@ -561,7 +561,7 @@ class Cards(commands.Cog):
         if not crafted:
             await ctx.send("Couldn't find enough duplicate cards to craft together")
         else:
-            string = "Auto-crafting complete!\n"
+            string = "Auto-crafting complete! Here is what's gotten made: \n"
             for rarity in gained:
                 r_string = f"**{rarity}**:\n> "
                 for i in gained[rarity]:
