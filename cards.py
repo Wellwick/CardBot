@@ -516,6 +516,38 @@ class Cards(commands.Cog):
         await sheets.gain_cards(who, [self.cardlist.index(selection)])
         await ctx.send("Crafted **{}** card".format(selection.name))
 
+    async def autocraft(self, ctx, who):
+        owned = {}
+        for i in self.trading[who]:
+            if i.rarity == "Legendary":
+                # We can't upgrade Legendary cards!
+                continue
+            if i.rarity not in owned:
+                owned[i.rarity] = {}
+            if i not in owned[i.rarity]:
+                owned[i.rarity][i] = 0
+            owned[i.rarity][i] += 1
+        
+        crafted = False
+
+        for rarity in owned:
+            # We're looking for a collection of three things!
+            group = []
+            for card in owned[rarity]:
+                while owned[rarity][card] > 1:
+                    owned[rarity][card] -= 1
+                    group += [card]
+                    if len(group) == 3:
+                        # Pretend this is a string being passed into the craft
+                        # function
+                        group_string = f"[{group[0].name}, {group[1].name}, {group[2].name}]"
+                        await self.craft(ctx, who, group_string)
+                        crafted = True
+                        group = []
+        
+        if not crafted:
+            await ctx.send("Couldn't find enough duplicate cards to craft together")
+
     @commands.command()
     async def tc(self, ctx, action, *args):
         '''Do things for the Fanatical Fics server trading card game.
@@ -525,6 +557,7 @@ class Cards(commands.Cog):
             %tc masterlist - View the existing rarity masterlist
             %tc trade [offer/view/accept/reject/cancel/help] @username - Make a trade
             %tc craft [Card 1, Card 2, Card 3] - Craft three cards together into a new one
+            %tc autocraft - Automatically craft away duplicates (as long as you have 3 or more in a specific rarity)
         '''
         # Wellwick, Kim, sequoia
         granters = ["227834498019098624","347524359830634496","472241913467240449"]
@@ -565,6 +598,8 @@ class Cards(commands.Cog):
             await self.grant(who, amount)
         elif action == "craft":
             await self.craft(ctx, str(ctx.author.id), *args)
+        elif action == "autocraft":
+            await self.autocraft(ctx, str(ctx.author.id))
 
     async def recc(self, ctx, command, *args):
         '''recommend and mywork have the same format, so this shares the code
