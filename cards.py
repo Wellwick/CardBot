@@ -576,7 +576,8 @@ class Cards(commands.Cog):
             await sheets.remove_cards(who, r_card_index)
             gain_list = []
             for i in gained:
-                gain_list += gained[i]
+                for card in gained[i]:
+                    gain_list += [self.cardlist.index(card)]
             await sheets.gain_cards(who, gain_list)
 
     @commands.command()
