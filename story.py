@@ -45,7 +45,7 @@ class Story:
                     # We're starting on an option
                     nodes += [ StoryNode("Pick an option to start:") ]
                     offset += 1
-                nodes += [ Option(i[1]) ]
+                nodes += [ OptionNode(i[1]) ]
             elif i[0] == "STORY":
                 nodes += [ StoryNode(i[1]) ]
             else:
