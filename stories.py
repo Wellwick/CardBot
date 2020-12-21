@@ -26,6 +26,8 @@ class Stories(commands.Cog):
                 await ctx.send(string)
                 string = ""
         await ctx.send(string)
+        if story.shown_end:
+            del self.stories[ctx.author.id]
 
     async def select(self, ctx, val):
         story = self.stories[ctx.author.id]
@@ -55,4 +57,7 @@ class Stories(commands.Cog):
             except:
                 await ctx.send("Expected 'list', 'load' or a number")
                 return
-            await self.select(ctx, val)
+            if ctx.author.id in self.stories:
+                await self.select(ctx, val)
+            else:
+                await ctx.send("Start a story with %s load")
