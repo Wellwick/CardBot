@@ -30,7 +30,7 @@ class Stories(commands.Cog):
         story = self.stories[ctx.author.id]
         if story.current_node.has_options():
             story.choose(val)
-        self.do_step(ctx)
+        await self.do_step(ctx)
 
 
     @commands.command()

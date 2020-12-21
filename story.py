@@ -29,6 +29,7 @@ class Story:
     def __init__(self, name):
         self.name = name
         self.shown_options = False
+        self.shown_end = False
 
     def load_story(self, inputs):
         """
@@ -80,7 +81,7 @@ class Story:
         self.current_node = nodes[0]
 
     def can_step(self):
-        return not (self.shown_options or self.current_node.is_end())
+        return not (self.shown_options or self.shown_end)
 
     def do_step(self):
         text = [ self.current_node.text ]
@@ -93,6 +94,7 @@ class Story:
             self.shown_options = True
         elif self.current_node.is_end():
             text += [ "The End" ]
+            self.shown_end = True
         else:
             self.current_node = self.current_node.next
             self.shown_options = False
@@ -101,3 +103,4 @@ class Story:
     def choose(self, val):
         assert self.current_node.has_options()
         self.current_node = self.current_node.options[val].next
+        self.shown_options = False
