@@ -9,6 +9,23 @@ class Stories(commands.Cog):
     async def load_story(self, user, story):
         pass
 
+    async def do_step(self, ctx):
+        story = self.stories[ctx.author.id]
+        text = []
+        while story.can_step():
+            text += story.do_step()
+            text += [ "\n" ]
+        if len(text) == 0:
+            text = [ "Could not progress the story. Please contact Wellwick, since this is probably a bug!" ]
+        index = 0
+        string = ""
+        for i in text:
+            if len(string) + len(i) < 1990:
+                string += "\n" + i
+            else:
+                await ctx.send(string)
+
+
     @commands.command()
     async def s(self, ctx, *, args):
         '''Play through an adventure story.
@@ -21,3 +38,5 @@ class Stories(commands.Cog):
             await ctx.send("Here is a list of the available stories:\n**" + "**, ".join(stories) + "**")
         elif args[:4] == "load":
             story = await sheets.get_story(args[4:].strip())
+            self.stories[ctx.author.id] = story
+            await do_step(ctx)

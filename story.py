@@ -21,6 +21,9 @@ class StoryNode:
     def is_end(self):
         return self.next == None and len(options) == 0
 
+    def has_options(self):
+        return len(self.options) > 0
+
 
 class Story:
     def __init__(self, name):
@@ -67,4 +70,25 @@ class Story:
             else:
                 if len(inputs[input_index]) == 2:
                     nodes[i].next = nodes[i+1]
+                elif inputs[input_index][2] != "END":
+                    val = inputs[input_index][2]
+                    nodes[i].next = nodes[int(val)+offset]
+                lastNode = nodes[i]
+        self.current_node = nodes[0]
 
+    def can_step():
+        return not (self.current_node.has_options() or self.current_node.is_end())
+
+    def do_step(self):
+        text = [ self.current_node.text ]
+        if self.current_node.has_options():
+            text += [ "Use `%s value` to select an option"]
+            val = 1
+            for i in self.current_node.options:
+                text += [ f"> {val}: {i.text}" ]
+        elif self.current_node.is_end():
+            text += [ "The End" ]
+        else:
+            self.current_node = self.current_node.next
+        return text
+        
