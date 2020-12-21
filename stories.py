@@ -39,4 +39,4 @@ class Stories(commands.Cog):
         elif args[:4] == "load":
             story = await sheets.get_story(args[4:].strip())
             self.stories[ctx.author.id] = story
-            await do_step(ctx)
+            await self.do_step(ctx)

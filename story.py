@@ -19,7 +19,7 @@ class StoryNode:
         return False
 
     def is_end(self):
-        return self.next == None and len(options) == 0
+        return self.next == None and len(self.options) == 0
 
     def has_options(self):
         return len(self.options) > 0
@@ -76,7 +76,7 @@ class Story:
                 lastNode = nodes[i]
         self.current_node = nodes[0]
 
-    def can_step():
+    def can_step(self):
         return not (self.current_node.has_options() or self.current_node.is_end())
 
     def do_step(self):
