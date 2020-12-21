@@ -102,5 +102,9 @@ class Story:
     
     def choose(self, val):
         assert self.current_node.has_options()
+        if val >= len(self.current_node.options):
+            # We can't pick an option that high
+            return False
         self.current_node = self.current_node.options[val].next
         self.shown_options = False
+        return True

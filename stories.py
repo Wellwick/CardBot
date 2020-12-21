@@ -6,9 +6,6 @@ class Stories(commands.Cog):
     def __init__(self):
         self.stories = {}
 
-    async def load_story(self, user, story):
-        pass
-
     async def do_step(self, ctx):
         story = self.stories[ctx.author.id]
         text = []
@@ -32,8 +29,15 @@ class Stories(commands.Cog):
     async def select(self, ctx, val):
         story = self.stories[ctx.author.id]
         if story.current_node.has_options():
-            story.choose(val)
-        await self.do_step(ctx)
+            success = story.choose(val)
+        else:
+            success = False
+        if story.can_step():
+            await self.do_step(ctx)
+        elif not success:
+            await ctx.send("Can't pick a value this high")
+        else:
+            await ctx.send("Failed to pick an option. Please contact Wellwick, since this is probably a bug!")
 
 
     @commands.command()
