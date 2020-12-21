@@ -12,6 +12,7 @@ import cards, ficwriter
 import episodes
 import bingo
 import randomfic
+import stories
 
 '''My (CardBot's) Main Script
 I'm friendly, and I have commands to support the Fanatical Fics discord
@@ -58,6 +59,7 @@ b.add_cog(ficwriter.FicWriter(c))
 b.add_cog(episodes.Episodes())
 b.add_cog(bingo.Bingo())
 b.add_cog(randomfic.RandomFic())
+b.add_cog(stories.Stories())
 
 with open('secret') as s:
     token = s.read()[:-1]
