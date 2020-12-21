@@ -15,6 +15,7 @@ drive_service = build('drive', 'v3', credentials=c)
 
 TradingDatabaseID = '1MWxevabC-7OiQuEd8vT6HWsLGxhqTHxkhKOLzLP7Qmk'
 ReccID = '1MYxwMMXpNfx22gsbPmKLlkPh30NZNXeKSMBo96s7knc'
+StoriesID = '1_fduCenhFnr1Uo1Uu12XinNmGB4N8oMUFMXN2H0IRjc'
 
 async def trading_cards():
     sheet = service.spreadsheets()
@@ -374,3 +375,11 @@ async def recommend(who, recc):
 
 async def mywork(who, recc):
     await recc_sheet_write(1683188476, "Works", who, recc)
+
+async def get_stories():
+    sheet = service.spreadsheets().get(spreadsheetId=StoriesID).execute()
+    sheets = sheet.get('sheets', '')
+    titles = []
+    for i in sheets:
+        titles += [i["properties"]["title"]]
+    return titles
