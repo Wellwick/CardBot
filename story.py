@@ -65,7 +65,7 @@ class Story:
                 val = inputs[input_index][2]
                 nodes[i].next = nodes[int(val)+offset]
             else:
-                if inputs[input_index][2] != "END":
+                if len(inputs[input_index]) != 2:
                     nodes[i].next = nodes[i+1]
 
 
