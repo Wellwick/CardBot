@@ -59,6 +59,8 @@ class Story:
         # Now that we've created all the nodes so we can point at them, 
         # let's create the sequence
         lastNode = nodes[0]
+        if len(nodes) > 1:
+            nodes[0].next = nodes[1]
         for i in range(1, len(nodes)):
             input_index = i - 2 - offset
             if nodes[i].is_option():
