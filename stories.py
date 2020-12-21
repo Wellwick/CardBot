@@ -24,6 +24,8 @@ class Stories(commands.Cog):
                 string += "\n" + i
             else:
                 await ctx.send(string)
+                string = ""
+        await ctx.send(string)
 
 
     @commands.command()
