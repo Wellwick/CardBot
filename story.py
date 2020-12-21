@@ -89,6 +89,7 @@ class Story:
             val = 1
             for i in self.current_node.options:
                 text += [ f"> {val}: {i.text}" ]
+                val += 1
             self.shown_options = True
         elif self.current_node.is_end():
             text += [ "The End" ]
@@ -96,4 +97,7 @@ class Story:
             self.current_node = self.current_node.next
             self.shown_options = False
         return text
-        
+    
+    def choose(self, val):
+        assert self.current_node.has_options()
+        self.current_node = self.current_node.options[val].next

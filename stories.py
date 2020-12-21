@@ -14,7 +14,6 @@ class Stories(commands.Cog):
         text = []
         while story.can_step():
             text += story.do_step()
-            text += [ "\n" ]
         if len(text) == 0:
             text = [ "Could not progress the story. Please contact Wellwick, since this is probably a bug!" ]
         index = 0
@@ -26,6 +25,12 @@ class Stories(commands.Cog):
                 await ctx.send(string)
                 string = ""
         await ctx.send(string)
+
+    async def select(self, ctx, val):
+        story = self.stories[ctx.author.id]
+        if story.current_node.has_options():
+            story.choose(val)
+        self.do_step(ctx)
 
 
     @commands.command()
@@ -42,3 +47,11 @@ class Stories(commands.Cog):
             story = await sheets.get_story(args[4:].strip())
             self.stories[ctx.author.id] = story
             await self.do_step(ctx)
+        else:
+            try:
+                # This is which index of the options to do
+                val = int(args.strip()) - 1
+            except:
+                await ctx.send("Expected 'list', 'load' or a number")
+                return
+            await self.select(ctx, val)
