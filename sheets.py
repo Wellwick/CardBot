@@ -380,7 +380,7 @@ async def mywork(who, recc):
 async def get_story(name):
     sheet = service.spreadsheets()
     story_result = sheet.values().get(spreadsheetId=StoriesID,
-                                range='{name}!A2:C1000').execute()
+                                range='{}!A2:C1000'.format(name)).execute()
     story_result = story_result.get('values', [])
     story = Story(name)
     story.load_story(story_result)
