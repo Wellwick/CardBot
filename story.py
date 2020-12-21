@@ -25,8 +25,6 @@ class StoryNode:
 class Story:
     def __init__(self, name):
         self.name = name
-        self.current_node = start_node
-
 
     def load_story(self, inputs):
         """

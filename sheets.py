@@ -2,6 +2,7 @@ import pickle, os.path, datetime, random, difflib
 from googleapiclient.discovery import build
 from google.oauth2 import service_account as s_a
 from episode import Episode
+from story import Story
 
 SECRET = os.path.join(os.getcwd(), "gsecret.json")
 SCOPES = ['https://www.googleapis.com/auth/drive']
@@ -375,6 +376,15 @@ async def recommend(who, recc):
 
 async def mywork(who, recc):
     await recc_sheet_write(1683188476, "Works", who, recc)
+
+async def get_story(name):
+    sheet = service.spreadsheets()
+    story_result = sheet.values().get(spreadsheetId=StoriesID,
+                                range='{name}!A2:C1000').execute()
+    story_result = story_result.get('values', [])
+    story = Story(name)
+    story.load_story(story_result)
+    return story
 
 async def get_stories():
     sheet = service.spreadsheets().get(spreadsheetId=StoriesID).execute()
