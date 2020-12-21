@@ -93,7 +93,7 @@ class Story:
                 val += 1
             self.shown_options = True
         elif self.current_node.is_end():
-            text += [ "The End" ]
+            text += [ "\n**The End**" ]
             self.shown_end = True
         else:
             self.current_node = self.current_node.next

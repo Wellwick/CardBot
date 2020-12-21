@@ -14,6 +14,7 @@ class Stories(commands.Cog):
         text = []
         while story.can_step():
             text += story.do_step()
+            text += [""]
         if len(text) == 0:
             text = [ "Could not progress the story. Please contact Wellwick, since this is probably a bug!" ]
         index = 0
