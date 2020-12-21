@@ -49,7 +49,7 @@ class Stories(commands.Cog):
         '''
         if args[:4] == "list":
             stories = await sheets.get_stories()
-            await ctx.send("Here is a list of the available stories:\n**" + "**, ".join(stories) + "**")
+            await ctx.send("Here is a list of the available stories:\n**" + "**, **".join(stories) + "**")
         elif args[:4] == "load":
             story = await sheets.get_story(args[4:].strip())
             self.stories[ctx.author.id] = story
