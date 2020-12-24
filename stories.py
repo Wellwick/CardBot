@@ -26,7 +26,7 @@ class Stories(commands.Cog):
 
     async def select(self, ctx, val):
         story = self.stories[ctx.author.id]
-        if story.current_node.has_options():
+        if story.current_node.has_options() or story.shown_end:
             success = story.choose(val)
         else:
             success = False
