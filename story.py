@@ -101,6 +101,8 @@ class Story:
         elif self.current_node.is_end():
             text += [ "\n**The End**" ]
             self.shown_end = True
+            self.prev_branches += [ self.current_branch ]
+            text += [ f"> 0: Go Back" ]
         else:
             self.current_node = self.current_node.next
             self.shown_options = False
@@ -125,5 +127,7 @@ class Story:
                 self.current_node = self.prev_branches[-1]
                 self.current_branch = self.current_node
                 self.prev_branches = self.prev_branches[:-1]
+                self.shown_options = False
+                self.shown_end = False
                 return True
 
