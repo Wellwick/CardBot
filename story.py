@@ -99,7 +99,7 @@ class Story:
                 val += 1
             self.shown_options = True
         elif self.current_node.is_end():
-            text += [ "\n**The End** - You can use %s 0 to go back to your last choice (if you like)!" ]
+            text += [ f"\n**The End** - You can use %s 0 to go back to your last choice or %s load {self.name} to restart the story (if you like)!" ]
             self.shown_end = True
         else:
             self.current_node = self.current_node.next
