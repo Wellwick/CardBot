@@ -109,7 +109,7 @@ class Story:
     
     def choose(self, val):
         # Remember if they have selected 0, the value will be -1
-        assert self.current_node.has_options()
+        assert self.current_node.has_options() or (val == -1 and self.shown_end)
         if val < -1 or val >= len(self.current_node.options):
             # We can't pick an option that high
             return False
