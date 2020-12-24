@@ -21,7 +21,7 @@ class Stories(commands.Cog):
                 string += "\n" + i
             else:
                 await ctx.send(string)
-                string = ""
+                string = i
         await ctx.send(string)
 
     async def select(self, ctx, val):
