@@ -107,11 +107,12 @@ class Story:
         return text
     
     def choose(self, val):
+        # Remember if they have selected 0, the value will be -1
         assert self.current_node.has_options()
-        if val < 0 or val >= len(self.current_node.options):
+        if val < -1 or val >= len(self.current_node.options):
             # We can't pick an option that high
             return False
-        if val != 0:
+        if val != -1:
             self.prev_branches += [ self.current_branch ]
             self.current_node = self.current_node.options[val].next
             self.current_branch = self.current_node
