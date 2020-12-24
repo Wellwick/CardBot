@@ -35,7 +35,7 @@ class Stories(commands.Cog):
         if story.can_step():
             await self.do_step(ctx)
         elif not success:
-            await ctx.send("Can't pick a value this high")
+            await ctx.send("This value is not an option!")
         else:
             await ctx.send("Failed to pick an option. Please contact Wellwick, since this is probably a bug!")
 

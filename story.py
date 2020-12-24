@@ -82,6 +82,7 @@ class Story:
                     nodes[i].next = nodes[int(val)+offset]
                 lastNode = nodes[i]
         self.current_node = nodes[0]
+        self.current_branch = self.current_node
 
     def can_step(self):
         return not (self.shown_options or self.shown_end)
@@ -91,7 +92,8 @@ class Story:
         if self.current_node.has_options():
             text += [ "Use `%s value` to select an option"]
             val = 1
-            text += [ f"> 0: Go Back" ]
+            if len(self.prev_branches) > 0:
+                text += [ f"> 0: Go Back" ]
             for i in self.current_node.options:
                 text += [ f"> {val}: {i.text}" ]
                 val += 1
