@@ -30,6 +30,9 @@ class Story:
         self.name = name
         self.shown_options = False
         self.shown_end = False
+        self.prev_branches = []
+        # Current branch will be added to the prev_branches so we can step back
+        self.current_branch = None
 
     def load_story(self, inputs):
         """
@@ -88,6 +91,7 @@ class Story:
         if self.current_node.has_options():
             text += [ "Use `%s value` to select an option"]
             val = 1
+            text += [ f"> 0: Go Back" ]
             for i in self.current_node.options:
                 text += [ f"> {val}: {i.text}" ]
                 val += 1
@@ -102,9 +106,21 @@ class Story:
     
     def choose(self, val):
         assert self.current_node.has_options()
-        if val >= len(self.current_node.options):
+        if val < 0 or val >= len(self.current_node.options):
             # We can't pick an option that high
             return False
-        self.current_node = self.current_node.options[val].next
-        self.shown_options = False
-        return True
+        if val != 0:
+            self.prev_branches += [ self.current_branch ]
+            self.current_node = self.current_node.options[val].next
+            self.current_branch = self.current_node
+            self.shown_options = False
+            return True
+        else:
+            if len(self.prev_branches) == 0:
+                return False
+            else:
+                self.current_node = self.prev_branches[-1]
+                self.current_branch = self.current_node
+                self.prev_branches = self.prev_branches[:-1]
+                return True
+
