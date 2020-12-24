@@ -23,8 +23,6 @@ class Stories(commands.Cog):
                 await ctx.send(string)
                 string = ""
         await ctx.send(string)
-        if story.shown_end:
-            del self.stories[ctx.author.id]
 
     async def select(self, ctx, val):
         story = self.stories[ctx.author.id]
