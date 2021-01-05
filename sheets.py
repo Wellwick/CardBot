@@ -372,10 +372,10 @@ async def recc_sheet_write(sheet_id, sheet_name, who, recc):
     batch_res = sheet.batchUpdate(spreadsheetId=ReccID, body={"requests": reqs}).execute()
 
 async def recommend(who, recc):
-    await recc_sheet_write(0, "Recs", who, recc)
+    await recc_sheet_write(1412419191, "Recs", who, recc)
 
 async def mywork(who, recc):
-    await recc_sheet_write(1683188476, "Works", who, recc)
+    await recc_sheet_write(1416629788, "Works", who, recc)
 
 async def get_story(name):
     sheet = service.spreadsheets()
