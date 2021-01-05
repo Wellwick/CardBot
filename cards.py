@@ -592,8 +592,10 @@ class Cards(commands.Cog):
             %tc craft [Card 1, Card 2, Card 3] - Craft three cards together into a new one
             %tc autocraft - Automatically craft away duplicates (as long as you have 3 or more in a specific rarity)
         '''
-        # Wellwick, Kim, sequoia
-        granters = ["227834498019098624","347524359830634496","472241913467240449"]
+        await ctx.send("Trading Cards are coming soon!")
+        return
+        # Wellwick, Megs, Jen
+        granters = ["227834498019098624","646205408507068417","390323966486511636"]
         if action == "unpause" and str(ctx.author.id) == "227834498019098624":
             self.pause = False
             return

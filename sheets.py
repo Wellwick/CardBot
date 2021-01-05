@@ -15,7 +15,7 @@ drive_service = build('drive', 'v3', credentials=c)
 # - - - - More weird channel stuff below. Should hopefully still work when copy-pasted
 
 TradingDatabaseID = '1MWxevabC-7OiQuEd8vT6HWsLGxhqTHxkhKOLzLP7Qmk'
-ReccID = '1MYxwMMXpNfx22gsbPmKLlkPh30NZNXeKSMBo96s7knc'
+ReccID = '1OpawKgTuw_RFrtpchsSClWoY3H0qOyujB9NiQ2sw7-4'
 StoriesID = '1_fduCenhFnr1Uo1Uu12XinNmGB4N8oMUFMXN2H0IRjc'
 
 async def trading_cards():
@@ -210,7 +210,7 @@ async def get_bunnies():
 async def get_morphologische():
     sheet = service.spreadsheets()
     works_result = sheet.values().get(spreadsheetId=ReccID,
-                                range='Morphologische!A2:E1000').execute()
+                                range='Prompts!A2:E1000').execute()
     works = works_result.get('values', [])
     morph = {
         "character": [],
