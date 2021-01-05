@@ -162,7 +162,7 @@ async def remove_cards(owner, cards):
 async def get_fics():
     sheet = service.spreadsheets()
     recs_result = sheet.values().get(spreadsheetId=ReccID,
-                                range='Recs!A3:G1000').execute()
+                                range='Recs!A2:G1000').execute()
     recs = recs_result.get('values', [])
     fics = []
     for row in recs:
@@ -178,7 +178,7 @@ async def get_fics():
 async def get_works():
     sheet = service.spreadsheets()
     works_result = sheet.values().get(spreadsheetId=ReccID,
-                                range='Works!A3:G1000').execute()
+                                range='Works!A2:G1000').execute()
     works = works_result.get('values', [])
     fics = []
     for row in works:
@@ -334,7 +334,7 @@ async def get_episodes():
 async def recc_sheet_write(sheet_id, sheet_name, who, recc):
     sheet = service.spreadsheets()
     result = sheet.values().get(spreadsheetId=ReccID,
-                                range='{}!A3:G1000'.format(sheet_name)).execute()
+                                range='{}!A2:G1000'.format(sheet_name)).execute()
     values = result.get('values', [])
     used_rows = 2
     for row in values:
