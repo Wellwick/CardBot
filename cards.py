@@ -756,3 +756,10 @@ class Cards(commands.Cog):
             else:
                 index = index - len(self.fics)
                 await self.print_fic(ctx, self.works[index], True)
+
+    @commands.command()
+    async def recache(self, ctx, *args):
+        self.cardlist = []
+        self.trading = {}
+        await self.set_local_cache()
+        await ctx.send("Recache complete")
