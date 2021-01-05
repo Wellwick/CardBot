@@ -583,7 +583,7 @@ class Cards(commands.Cog):
 
     @commands.command()
     async def tc(self, ctx, action, *args):
-        '''Do things for the Fanatical Fics server trading card game.
+        '''Do things for the Magical Shippers server trading card game.
             %tc claim - Claim your daily free card
             %tc view [Card] - View all the cards you own
             %tc submit - Get the link to submit new cards for review
