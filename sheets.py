@@ -38,7 +38,7 @@ async def trading_cards():
 async def owned_cards():
     sheet = service.spreadsheets()
     result = sheet.values().get(spreadsheetId=TradingDatabaseID,
-                                range='Owned!A2:B10000').execute()
+                                range='Owned!A2:B30000').execute()
     values = result.get('values', [])
     allinfo = []
     for row in values:
@@ -55,7 +55,7 @@ async def owned_cards():
 async def gain_cards(claimer, card_indexes):
     sheet = service.spreadsheets()
     result = sheet.values().get(spreadsheetId=TradingDatabaseID,
-                                range='Owned!A2:B10000').execute()
+                                range='Owned!A2:B30000').execute()
     values = result.get('values', [])
     used_rows = 1
     for row in values:
@@ -94,7 +94,7 @@ async def move_card_owner(old, new, cards):
         return
     sheet = service.spreadsheets()
     result = sheet.values().get(spreadsheetId=TradingDatabaseID,
-                                range='Owned!A2:B10000').execute()
+                                range='Owned!A2:B30000').execute()
     values = result.get('values', [])
     reqs = []
     for card in cards:
@@ -127,7 +127,7 @@ async def remove_cards(owner, cards):
         return
     sheet = service.spreadsheets()
     result = sheet.values().get(spreadsheetId=TradingDatabaseID,
-                                range='Owned!A2:B10000').execute()
+                                range='Owned!A2:B30000').execute()
     values = result.get('values', [])
     rows_to_delete = []
     for card in cards:

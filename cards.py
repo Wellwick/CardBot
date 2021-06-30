@@ -88,7 +88,7 @@ class Cards(commands.Cog):
             await ctx.send("Claiming {} bonus cards".format(self.bonus_claim[claimer_id]))
             amount += self.bonus_claim[claimer_id]
         if not claimer_id in self.claims[day]:
-            amount += 2
+            amount += 1
 
         total = 0
         for i in self.cardlist:
