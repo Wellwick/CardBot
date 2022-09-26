@@ -38,6 +38,7 @@ class Cards(commands.Cog):
         self.trades = {}
         self.fics = []
         self.works = []
+        self.podfics = []
         self.cached = False
         self.pause = False
 
@@ -68,6 +69,7 @@ class Cards(commands.Cog):
     async def load_fics(self):
         self.fics = await sheets.get_fics()
         self.works = await sheets.get_works()
+        self.podfics = await sheets.get_podfics()
 
     async def random_claim(self, ctx, claimer_id):
         # Check if this person has already claimed today
@@ -635,7 +637,7 @@ class Cards(commands.Cog):
             await self.autocraft(ctx, str(ctx.author.id))
 
     async def recc(self, ctx, command, *args):
-        '''recommend and mywork have the same format, so this shares the code
+        '''recommend, mywork and podfic have the same format, so this shares the code
         '''
         s = ""
         for i in args:
@@ -684,6 +686,23 @@ class Cards(commands.Cog):
         self.works += [recc]
         await self.grant(str(ctx.author.id), 5)
         await ctx.send("Thanks for writing a fic, you have been granted bonus cards you can `%tc claim`!")
+
+    @commands.command()
+    async def recpodfic(self, ctx, *args):
+        '''Recommend a podfic to everyone, inserts the recommendation in the Podfics sheet of the patreon recommendations.
+        Format of recommend is %recpodfic link | title | tags | characters/pairings | length | additional notes
+        All but link are optional, but encouraged!
+        '''
+        await self.check_cache(ctx)
+        recc = await self.recc(ctx, "recpodfic", *args)
+        await sheets.recommend_podfic(str(ctx.author.name), recc)
+        if len(recc) == 1:
+            recc += ["", ctx.author.name]
+        else:
+            recc.insert(2, ctx.author.name)
+        self.podfics += [recc]
+        await self.grant(str(ctx.author.id), 2)
+        await ctx.send("Thanks for recommending a fic, you have been granted bonus cards you can `%tc claim`!")
 
     async def print_fic(self, ctx, fic, author):
         link = fic[0]
@@ -747,10 +766,14 @@ class Cards(commands.Cog):
                     continue
             await ctx.send("Couldn't find the fic **{}**".format(s))
         else:
-            fic_range = len(self.fics) + len(self.works)
+            fic_range = len(self.fics) + len(self.works) + len(self.podfics)
             index = random.randrange(0,fic_range)
             if index < len(self.fics):
                 await self.print_fic(ctx, self.fics[index], False)
             else:
                 index = index - len(self.fics)
-                await self.print_fic(ctx, self.works[index], True)
+                if index < len(self.works):
+                    await self.print_fic(ctx, self.works[index], True)
+                else:
+                    index = index - len(self.works)
+                    await self.print_fic(ctx, self.podfics[index], False)

@@ -162,7 +162,7 @@ async def remove_cards(owner, cards):
 async def get_fics():
     sheet = service.spreadsheets()
     recs_result = sheet.values().get(spreadsheetId=ReccID,
-                                range='Recs!A3:G1000').execute()
+                                range='Recs!A3:G3000').execute()
     recs = recs_result.get('values', [])
     fics = []
     for row in recs:
@@ -182,6 +182,22 @@ async def get_works():
     works = works_result.get('values', [])
     fics = []
     for row in works:
+        try:
+            if str(row[0]) != "":
+                fics += [row]
+            else:
+                break
+        except:
+            continue
+    return fics
+
+async def get_podfics():
+    sheet = service.spreadsheets()
+    recs_result = sheet.values().get(spreadsheetId=ReccID,
+                                range='Podfics!A3:G1000').execute()
+    recs = recs_result.get('values', [])
+    fics = []
+    for row in recs:
         try:
             if str(row[0]) != "":
                 fics += [row]
@@ -334,7 +350,7 @@ async def get_episodes():
 async def recc_sheet_write(sheet_id, sheet_name, who, recc):
     sheet = service.spreadsheets()
     result = sheet.values().get(spreadsheetId=ReccID,
-                                range='{}!A3:G1000'.format(sheet_name)).execute()
+                                range='{}!A3:G3000'.format(sheet_name)).execute()
     values = result.get('values', [])
     used_rows = 2
     for row in values:
@@ -376,6 +392,9 @@ async def recommend(who, recc):
 
 async def mywork(who, recc):
     await recc_sheet_write(1683188476, "Works", who, recc)
+
+async def recommend_podfic(who, recc):
+    await recc_sheet_write(1768899291, "Podfics", who, recc)
 
 async def get_story(name):
     sheet = service.spreadsheets()
