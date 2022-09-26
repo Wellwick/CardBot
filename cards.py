@@ -764,6 +764,13 @@ class Cards(commands.Cog):
                         return
                 except:
                     continue
+            for i in self.podfics:
+                try:
+                    if i[1].lower() == s.lower():
+                        await self.print_fic(ctx, i, True)
+                        return
+                except:
+                    continue
             await ctx.send("Couldn't find the fic **{}**".format(s))
         else:
             fic_range = len(self.fics) + len(self.works) + len(self.podfics)
