@@ -784,3 +784,40 @@ class Cards(commands.Cog):
                 else:
                     index = index - len(self.works)
                     await self.print_fic(ctx, self.podfics[index], False)
+
+    @commands.command()
+    async def recmepodfic(self, ctx, *args):
+        '''Provide a random podfic recommendation from the spreadsheet, or get one by name.
+        '''
+        await self.check_cache(ctx)
+        if len(args) > 0:
+            s = ""
+            for i in args:
+                s += i + " "
+            s = s[:-1]
+            for i in self.fics:
+                try:
+                    if i[1].lower() == s.lower():
+                        await self.print_fic(ctx, i, False)
+                        return
+                except:
+                    continue
+            for i in self.works:
+                try:
+                    if i[1].lower() == s.lower():
+                        await self.print_fic(ctx, i, True)
+                        return
+                except:
+                    continue
+            for i in self.podfics:
+                try:
+                    if i[1].lower() == s.lower():
+                        await self.print_fic(ctx, i, True)
+                        return
+                except:
+                    continue
+            await ctx.send("Couldn't find the fic **{}**".format(s))
+        else:
+            fic_range = len(self.podfics)
+            index = random.randrange(0,fic_range)
+            await self.print_fic(ctx, self.podfics[index], False)
