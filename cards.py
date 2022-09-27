@@ -795,20 +795,6 @@ class Cards(commands.Cog):
             for i in args:
                 s += i + " "
             s = s[:-1]
-            for i in self.fics:
-                try:
-                    if i[1].lower() == s.lower():
-                        await self.print_fic(ctx, i, False)
-                        return
-                except:
-                    continue
-            for i in self.works:
-                try:
-                    if i[1].lower() == s.lower():
-                        await self.print_fic(ctx, i, True)
-                        return
-                except:
-                    continue
             for i in self.podfics:
                 try:
                     if i[1].lower() == s.lower():
@@ -816,7 +802,7 @@ class Cards(commands.Cog):
                         return
                 except:
                     continue
-            await ctx.send("Couldn't find the fic **{}**".format(s))
+            await ctx.send("Couldn't find the podfic **{}**".format(s))
         else:
             fic_range = len(self.podfics)
             index = random.randrange(0,fic_range)
